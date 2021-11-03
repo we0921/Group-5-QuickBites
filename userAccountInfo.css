@@ -155,7 +155,7 @@
 .redButton:active {background-color: #9e0b0b}
 .sectionButtonContainer {
 	/*background-color: red;*/
-	height:100%;
+	height: 50%;
 	width: 30%;
 	float: right;
 }
