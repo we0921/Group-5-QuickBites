@@ -1,6 +1,227 @@
 <!doctype html>
 	<header>
-		<link href = "userAccountInfo.css" rel = "stylesheet"/>
+		<style media = "screen">
+			#body {
+				margin: 0px;
+				padding: 0px;
+			}
+			#banner {
+				background-color: #007BFF;
+				height: 9vh;
+				width: 100%;
+				margin: 0px;
+			}
+			#logo {
+				/*background-color: #FFFF99;*/
+				height: 100%;
+				width: 20%;
+				font-size: 40px;
+				float: left;
+				margin: 0px;
+			}
+			#bannerButtonContainer {
+				/*background-color: #C4A484;*/
+				height: 100%;
+				width: 20%;
+				display: inline-block;
+			}
+			#backgroundStockImage {
+				content: url("https://res.cloudinary.com/grubhub-marketing/image/upload/f_auto,fl_lossy/v1621280438/HERMES/2021/DINER/SOC/SOC-202104005-GHGuaranteeMVP/GH%20New%20Hero%20Image%20Headers/GH_Headers_Desktop_copy.jpg");
+				/*background-color: #808080;*/
+				height: 25vh;
+				width: 100%;
+				/*object-fit: contain;*/
+			}
+			.vendorMenu {
+				/*background-color: #FFFF99;*/
+				height: 60vh;
+				width: 94%;
+				margin-left: 3%;
+				margin-top: .5%;
+			}
+			.sectionHeader {
+				/*background-color: #90EE90;*/
+				height: 6vh;
+				width: 100%;
+			}
+			.sectionBar {
+				background-color: #808080;
+				height: 2px;
+				width; 100%;
+			}
+			.sectionTitle {
+				font-size: 30px;
+				display: inline-block;
+			}
+			.menuEditor {
+				/*background-color: #CBC3E3;*/
+				height: 700%;
+				width: 100%;
+			}
+			.itemContainer {
+				height: 40%;
+				width: 100%;
+				margin-bottom: .9%;
+			}
+			.leftMenuItem {
+				border: solid;
+				border-color: #D3D3D3;
+				border-width: 1px;
+				border-top-left-radius: 4px;
+				border-top-right-radius: 4px;
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+				height: 100%;
+				width:  35%;
+				margin-left: 12%;
+				margin-top: .9%;
+				display: inline-block;
+			}
+			.rightMenuItem {
+				border: solid;
+				border-color: #D3D3D3;
+				border-width: 1px;
+				border-top-left-radius: 4px;
+				border-top-right-radius: 4px;
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+				height: 100%;
+				width:  35%;
+				margin-left: 6%;
+				margin-top: .9%;
+				display: inline-block;
+			}
+			.menuItemImage {
+				background-color: #FFD580;
+				height: 100%;
+				width: 30%;
+				display: inline-block;
+			}
+			.menuItemInfo {
+				/*background-color: #FFFFFF;*/
+				height: 100%;
+				width: 70%;
+				float: right;
+			}
+			.itemInfo {
+				/*background-color: #C4A484;*/
+				height: 100%;
+				width: 55%;
+				display: inline-block;
+			}
+			.itemName {
+				margin-top: 8%;
+				margin-left: 7%;
+			}
+			.itemCalories {
+				margin-top: 4%;
+				margin-left:7%;
+			}
+			.itemPrice{
+				margin-left: 7%;
+			}
+			.itemButtonContainer {
+				/*background-color: #ADD8E6;*/
+				height: 100%;
+				width: 45%;
+				float: right;
+			}
+			.itemButton {
+				background-color: #007BFF;
+				border: none;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+				color: white;
+				padding: 5px 10px;
+				text-align: center;
+				float: right;
+				font-size: 12px;
+				margin-right: 10%;
+				margin-top: 5%;
+			}
+			.itemButton:active {background-color: #064d80}
+			.redButton {
+				background-color: #FF7F7F;
+				border: none;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+				color: white;
+				padding: 5px 10px;
+				text-align: center;
+				float: right;
+				font-size: 12px;
+				margin-right: 10%;
+				margin-top: 5%;
+			}
+			.redButton:active {background-color: #9e0b0b}
+			.sectionButtonContainer {
+				/*background-color: red;*/
+				height: 50%;
+				width: 30%;
+				float: right;
+			}
+			.sectionButton{
+				background-color: #007BFF;
+				border: none;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+				color: white;
+				padding: 5px 10px;
+				text-align: center;
+				float: right;
+				font-size: 12px;
+				margin-right: 5%;
+				margin-top: 1%;
+			}
+			.sectionButton:active {background-color: #064d80}
+			#shopButton {
+				background-color: #ffdf00;
+				border: none;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+				color: white;
+				padding: 5px 10px;
+				text-align: center;
+				color: black;
+				float: left;
+				display: inline-block;
+				font-size: 12px;
+				margin-top: 5%;
+			}
+			#shopButton:active {background-color: #c2a900}
+			#adminButton {
+				background-color: #90EE90;
+				border: none;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+				color: white;
+				padding: 5px 10px;
+				text-align: center;
+				color: black;
+				float: left;
+				display: inline-block;
+				font-size: 12px;
+				margin-left: 2%;
+				margin-top: 5%;
+			}
+			#adminButton:active {background-color: #6bb06b}
+			#centered {
+			  position: absolute;
+			  top: 50%;
+			  left: 50%;
+			  transform: translate(-50%, -50%);
+			}
+		</style>
 	</header>
 	<body id = "body">
 		<div id = "banner"> 
@@ -12,8 +233,10 @@
 				<button id = "adminButton"> Admin Access </button>	
 			</div>
 		</div>
-		<div id = "backgroundStockImage"> 
-			stock image goes here
+		<div id = "backgroundStockImage", class = "image">
+		<h1>
+			<div class="centered">Restaurant Edit Page</div>
+		</h1>
 		</div>
 		<div class = "vendorMenu">
 			<div class = "sectionHeader">
@@ -33,13 +256,13 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<div class = "itemName"> Food Name </div>
-									<div class = "itemCalories"> Calories </div>
-									<div class = "itemPrice"> Price </div>
+									<input hidden> <div class = "itemName"> Food Name </div>
+									<input hidden> <div class = "itemCalories"> Calories </div>
+									<input hidden> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
 									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
-									<button class = "itemButton" > Delete Item </button>
+									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
 									<button class = "redButton" > Mark Unavailable </button>
 									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
 								</div>
@@ -51,14 +274,15 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<div class = "itemName"> Food Name </div>
-									<div class = "itemCalories"> Calories </div>
-									<div class = "itemPrice"> Price </div>
+									<input hidden> <div class = "itemName"> Food Name </div>
+									<input hidden> <div class = "itemCalories"> Calories </div>
+									<input hidden> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton"> Edit Item </button>
-									<button class = "itemButton"> Delete Item </button>
-									<button class = "redButton"> Mark Unavailable </button>
+									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
+									<button class = "redButton" > Mark Unavailable </button>
+									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
 								</div>
 							</div>
 						</div>
@@ -70,14 +294,15 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<div class = "itemName"> Food Name </div>
-									<div class = "itemCalories"> Calories </div>
-									<div class = "itemPrice"> Price </div>
+									<input hidden> <div class = "itemName"> Food Name </div>
+									<input hidden> <div class = "itemCalories"> Calories </div>
+									<input hidden> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton"> Edit Item </button>
-									<button class = "itemButton"> Delete Item </button>
-									<button class = "redButton"> Mark Unavailable </button>
+									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
+									<button class = "redButton" > Mark Unavailable </button>
+									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
 								</div>
 							</div>
 						</div>
@@ -87,22 +312,22 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<div class = "itemName"> Food Name </div>
-									<div class = "itemCalories"> Calories </div>
-									<div class = "itemPrice"> Price </div>
+									<input hidden> <div class = "itemName"> Food Name</div>
+									<input hidden> <div class = "itemCalories"> Calories</div>
+									<input hidden> <div class = "itemPrice"> Price</div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton"> Edit Item </button>
-									<button class = "itemButton"> Delete Item </button>
-									<button class = "redButton"> Mark Unavailable </button>
+									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
+									<button class = "redButton" > Mark Unavailable </button>
+									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div> 
-				<div class = "sectionButtonContainer">
-					<button class = "sectionButton"> Rename Section </button>
-					<button class = "sectionButton" onclick="deleteSection(this);"> Delete Section </button>
+				<div class = "addItemContainer">
+					<button class = "itemButton" onclick="addMenuItem(this);"> Add Item</button>
 				</div>
 			</div>
 		</div>
@@ -118,5 +343,188 @@
 			</div>
 		</div>
 		<script src = "vendorEditMenu.js"></script>
+		<script type = "text/javascript">
+			let lastItemIsRight = true;	//keeps track of if the last menu item is in the right or left position
+
+			// Adds text entry for menu item attributes (name, price, calories)
+			function addTextField(position) {
+				//Making save changes button visible
+				position = position.parentNode.childNodes[7];
+				position.style.display = 'block';
+				
+				//Making edit menu button invisible
+				position = position.parentNode.childNodes[1];
+				position.style.display = 'none';
+				
+				
+				//setting the position of current node to parent of all text fields
+				position = position.parentNode.parentNode.childNodes[1];
+				
+				//displaying all hidden textfields
+				console.log(position.children);
+				position.childNodes[1].style.display = 'block';
+				position.childNodes[3].style.display = 'block';
+				position.childNodes[5].style.display = 'block';
+			}
+
+			// Adds a new section to the menu
+			// Craig's terrible version of Daniel's implementation
+			// DO NOT USE IN FINAL VERSION - GOOD ENOUGH FOR DEMONSTRATION
+			function addSection(button) {
+				let position = button.parentNode.parentNode;
+				
+				// New menu section HTML is set to template
+				position.outerHTML = "<div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"> . </div><div class = \"menuEditor\"><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div></div><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name</div><input hidden> <div class = \"itemCalories\"> Calories</div><input hidden> <div class = \"itemPrice\"> Price</div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div></div></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addMenuItem(this);\"> Add Item</button></div></div>";
+				
+				// Append the header for a new section
+				document.body.appendChild(document.createElement("div"));
+				console.log(position.outerHTML);
+				position = document.body.lastChild;
+				console.log(position.outerHTML);
+				position.outerHTML = "<div class = \"vendorMenu\"><div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\" onclick = \"addSection(this);\"> Add Section </button></div><div class = \"sectionBar\"> . </div></div></div>";
+			}
+
+			//this function works the first time, but every subsequent case does not
+			function saveChanges(position) {
+				//setting position of node to "itemInfo"
+				position = position.parentNode.parentNode.childNodes[1];
+				
+				let nameStr = position.childNodes[1].value;
+				let caloriesStr = position.childNodes[5].value;
+				let priceStr = position.childNodes[9].value;
+				
+				//destroying <div class = "itemInfo">
+				position = position.parentNode;
+				position.childNodes[1].remove();
+				
+				console.log(position);
+				//adding <div class = "itemInfo">
+				position.insertBefore(document.createElement("div"), position.firstChild);
+				position = position.firstChild;
+				position.className = "itemInfo";
+				
+				console.log(position);
+				//adding <input hidden>
+				position.appendChild(document.createElement("input"));
+				position = position.lastChild;
+				position.style.display = 'none';
+				console.log(position);
+				
+				//adding <div class = "itemName">
+				position = position.parentNode;
+				position.appendChild(document.createElement("div"));
+				position = position.lastChild;
+				position.className = "itemName";
+				position.innerHTML = nameStr;
+				console.log(position);
+				
+				//adding <input hidden>
+				position = position.parentNode;
+				position.appendChild(document.createElement("input"));
+				position = position.lastChild;
+				position.style.display = 'none';
+				console.log(position);
+				
+				//adding <div class = "itemCalories">
+				position = position.parentNode;
+				position.appendChild(document.createElement("div"));
+				position = position.lastChild;
+				position.className = "itemCalories";
+				position.innerHTML = caloriesStr;
+				console.log(position);
+				
+				//adding <input hidden>
+				position = position.parentNode;
+				position.appendChild(document.createElement("input"));
+				position = position.lastChild;
+				position.style.display = 'none';
+				
+				//adding <div class = "itemPrice">
+				position = position.parentNode;
+				position.appendChild(document.createElement("div"));
+				position = position.lastChild;
+				position.className = "itemPrice";
+				position.innerHTML = priceStr;
+				
+				//fixing buttons
+				position = position.parentNode.parentNode.childNodes[3];
+				position.childNodes[1].style.display = 'block';
+				position.childNodes[7].style.display = 'none';
+				
+			}
+
+			// Function to "delete" a menu item
+			function deleteMenuItem(position) {
+				position.parent.parent.parent.style.display = "none";
+			}
+
+			// Function to "delete" a section
+			function deleteSection(button) {
+				let position = button.parentNode.parentNode.parentNode;
+				
+				// Nuclear option - completely wipes the HTML.
+				//position.outerHTML = "";
+				
+				// Less aggressive option - hides the section.
+				position.style.display = "none";
+			}
+
+			// Function to add an item to an existing menu section.
+			function addMenuItem(button) {
+				// Gets the last itemContainer in the menu section.
+				let position = button.parentNode.previousSibling.previousSibling.lastElementChild;
+				
+				// Determine how many items are in the final itemContainer
+				let size = position.children.length;
+				
+				console.log("Items in the itemContainer:" + size);
+				
+				
+				// If the itemContainer is full, add a new one with a single item.
+				if (size == 2)
+				{
+					// Move up to the MenuEditor div (contains itemContainers)
+					position = button.parentNode.parentNode.childNodes[7];
+					
+					// Add a new itemContainer div
+					position.appendChild(document.createElement("div"));
+
+					// Move position to the newly added div
+					console.log(position.children);
+					console.log("Position at length * 2 - 2: " + position.childNodes[position.children.length * 2 - 2]);
+					console.log("Position at length * 2 - 1: " + position.childNodes[position.children.length * 2 - 1]);
+					position = position.childNodes[position.children.length * 2 - 1];
+					
+					// Set the div to an itemContainer with a single new item on the left 
+					position.outerHTML = "<div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div></div>";
+					
+				}
+				// Otherwise add an item to the itemContainer
+				else {
+					// Move up to the MenuEditor div (contains itemContainers)
+					position = button.parentNode.parentNode.childNodes[7];
+					
+					// Move position to the last itemContainer div
+					position = position.childNodes[position.children.length * 2 - 1];
+					
+					console.log(position.children);
+					
+					// Add a div to the current itemContainer
+					position.appendChild(document.createElement("div"));
+					
+					console.log(position.children);
+					
+					// Move position to the newly added div
+					position = position.childNodes[1];
+					
+					console.log(position);
+					
+					// Make the div a rightMenuItem
+					position.outerHTML = "<div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div>";
+				}
+				
+				console.log("ITEM ADDED");
+			}
+		</script>
 	</body>
 </html>
