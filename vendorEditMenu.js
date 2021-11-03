@@ -37,3 +37,59 @@ function deleteSection(button) {
 	// Less aggressive option - hides the section.
 	position.style.display = "none";
 }
+
+function addMenuItem(button) {
+	// Gets the last itemContainer in the menu section.
+	let position = button.parentNode.previousSibling.previousSibling.lastElementChild;
+	
+	// Determine how many items are in the final itemContainer
+	let size = position.children.length;
+	
+	console.log("Items in the itemContainer:" + size);
+	
+	
+	// If the itemContainer is full, add a new one with a single item.
+	if (size == 2)
+	{
+		// Move up to the MenuEditor div (contains itemContainers)
+		position = button.parentNode.parentNode.childNodes[7];
+		
+		// Add a new itemContainer div
+		position.appendChild(document.createElement("div"));
+
+		// Move position to the newly added div
+		console.log(position.children);
+		console.log("Position at length * 2 - 2: " + position.childNodes[position.children.length * 2 - 2]);
+		console.log("Position at length * 2 - 1: " + position.childNodes[position.children.length * 2 - 1]);
+		position = position.childNodes[position.children.length * 2 - 1];
+		
+		// Set the div to an itemContainer with a single new item on the left 
+		position.outerHTML = "<div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div></div>";
+		
+	}
+	// Otherwise add an item to the itemContainer
+	else {
+		// Move up to the MenuEditor div (contains itemContainers)
+		position = button.parentNode.parentNode.childNodes[7];
+		
+		// Move position to the last itemContainer div
+		position = position.childNodes[position.children.length * 2 - 1];
+		
+		console.log(position.children);
+		
+		// Add a div to the current itemContainer
+		position.appendChild(document.createElement("div"));
+		
+		console.log(position.children);
+		
+		// Move position to the newly added div
+		position = position.childNodes[1];
+		
+		console.log(position);
+		
+		// Make the div a rightMenuItem
+		position.outerHTML = "<div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div>";
+	}
+	
+	console.log("ITEM ADDED");
+}
