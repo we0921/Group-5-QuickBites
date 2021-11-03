@@ -1,4 +1,3 @@
-// Adds text entry for menu item attributes (name, price, calories)
 function addTextField(x) {
 	x.style.display = "none";
 	x.parentNode.childNodes[7].style.display = "block";
@@ -10,86 +9,178 @@ function addTextField(x) {
 	}   
 }
 
-// Adds a new section to the menu
-// Craig's terrible version of Daniel's implementation
-// DO NOT USE IN FINAL VERSION - GOOD ENOUGH FOR DEMONSTRATION
 function addSection(button) {
 	let position = button.parentNode.parentNode;
 	
-	// New menu section HTML is set to template
-	position.outerHTML = "<div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"> . </div><div class = \"menuEditor\"><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" > Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div></div><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div></div></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addMenuItem(this);\"> Add Item</button></div></div>";
+	//adding <div class = "menuEditor">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuEditor";
 	
-	// Append the header for a new section
-	document.body.appendChild(document.createElement("div"));
-	console.log(position.outerHTML);
-	position = document.body.lastChild;
-	console.log(position.outerHTML);
-	position.outerHTML = "<div class = \"vendorMenu\"><div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\" onclick = \"addSection(this);\"> Add Section </button></div><div class = \"sectionBar\"> . </div></div></div>";
-}
-
-// Function to "delete" a section
-function deleteSection(button) {
-	let position = button.parentNode.parentNode.parentNode;
+	//adding <div class = "itemContainer">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemContainer";
 	
-	// Nuclear option - completely wipes the HTML.
-	//position.outerHTML = "";
+	//--------------------------------------------top left menu item-------------------------------------------------------//
+	//adding <div class = "leftMenuItem">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "leftMenuItem";
 	
-	// Less aggressive option - hides the section.
-	position.style.display = "none";
-}
-
-function addMenuItem(button) {
-	// Gets the last itemContainer in the menu section.
-	let position = button.parentNode.previousSibling.previousSibling.lastElementChild;
+	//adding <div class = "menuItemImage">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemImage";
+	position.innerHTML = "Food photo goes here";
 	
-	// Determine how many items are in the final itemContainer
-	let size = position.children.length;
+	//adding <div class = "menuItemInfo">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemInfo";
 	
-	console.log("Items in the itemContainer:" + size);
+	//adding <div class = "itemInfo">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemInfo";
 	
+	//adding <div class = "itemButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemButtonContainer";
 	
-	// If the itemContainer is full, add a new one with a single item.
-	if (size == 2)
-	{
-		// Move up to the MenuEditor div (contains itemContainers)
-		position = button.parentNode.parentNode.childNodes[7];
-		
-		// Add a new itemContainer div
-		position.appendChild(document.createElement("div"));
-
-		// Move position to the newly added div
-		console.log(position.children);
-		console.log("Position at length * 2 - 2: " + position.childNodes[position.children.length * 2 - 2]);
-		console.log("Position at length * 2 - 1: " + position.childNodes[position.children.length * 2 - 1]);
-		position = position.childNodes[position.children.length * 2 - 1];
-		
-		// Set the div to an itemContainer with a single new item on the left 
-		position.outerHTML = "<div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div></div>";
-		
-	}
-	// Otherwise add an item to the itemContainer
-	else {
-		// Move up to the MenuEditor div (contains itemContainers)
-		position = button.parentNode.parentNode.childNodes[7];
-		
-		// Move position to the last itemContainer div
-		position = position.childNodes[position.children.length * 2 - 1];
-		
-		console.log(position.children);
-		
-		// Add a div to the current itemContainer
-		position.appendChild(document.createElement("div"));
-		
-		console.log(position.children);
-		
-		// Move position to the newly added div
-		position = position.childNodes[1];
-		
-		console.log(position);
-		
-		// Make the div a rightMenuItem
-		position.outerHTML = "<div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div></div>";
-	}
+	//--------------------------------------------top right menu item-------------------------------------------------------//
+	position = position.parentNode.parentNode.parentNode;
 	
-	console.log("ITEM ADDED");
+	//adding <div class = "rightMenuItem">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "rightMenuItem";
+	
+	//adding <div class = "menuItemImage">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemImage";
+	position.innerHTML = "Food photo goes here";
+	
+	//adding <div class = "menuItemInfo">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemInfo";
+	
+	//adding <div class = "itemInfo">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemInfo";
+	
+	//adding <div class = "itemButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemButtonContainer";
+	
+	//--------------------------------------------top left menu item-------------------------------------------------------//
+	
+	position = position.parentNode.parentNode.parentNode.parentNode;
+	//adding <div class = "leftMenuItem">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "leftMenuItem";
+	
+	//adding <div class = "menuItemImage">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemImage";
+	position.innerHTML = "Food photo goes here";
+	
+	//adding <div class = "menuItemInfo">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemInfo";
+	
+	//adding <div class = "itemInfo">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemInfo";
+	
+	//adding <div class = "itemButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemButtonContainer";
+	
+	//--------------------------------------------top right menu item-------------------------------------------------------//
+	position = position.parentNode.parentNode.parentNode;
+	
+	//adding <div class = "rightMenuItem">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "rightMenuItem";
+	
+	//adding <div class = "menuItemImage">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemImage";
+	position.innerHTML = "Food photo goes here";
+	
+	//adding <div class = "menuItemInfo">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "menuItemInfo";
+	
+	//adding <div class = "itemInfo">
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemInfo";
+	
+	//adding <div class = "itemButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "itemButtonContainer";
+	
+	//--------------------Adding section header----------------------------------------------------------//
+	//adding <div class = "vendorMenu">
+	position = position.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "vendorMenu";
+	
+	//adding <div class = "sectionHeader">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionHeader";
+	
+	//adding <div class = "sectionTitle">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionTitle";
+	position.innerHTML = "Section Title";
+	
+	//adding <div class = "sectionButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionButtonContainer";
+	
+	//adding <div class = "sectionButton">
+	position.appendChild(document.createElement("button"));
+	position = position.lastChild;
+	position.className = "sectionButton";
+	//position.onclick = addSection(this);
+	position.innerHTML = "Add Section";
+	
+	//adding <div class = "sectionButtonContainer">
+	position = position.parentNode.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionBar";
+	position.innerHTML = ".";
 }
