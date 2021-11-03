@@ -143,4 +143,44 @@ function addSection(button) {
 	position.appendChild(document.createElement("div"));
 	position = position.lastChild;
 	position.className = "itemButtonContainer";
+	
+	//--------------------Adding section header----------------------------------------------------------//
+	//adding <div class = "vendorMenu">
+	position = position.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "vendorMenu";
+	
+	//adding <div class = "sectionHeader">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionHeader";
+	
+	//adding <div class = "sectionTitle">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionTitle";
+	position.innerHTML = "Section Title";
+	
+	//adding <div class = "sectionButtonContainer">
+	position = position.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionButtonContainer";
+	
+	//adding <div class = "sectionButton">
+	position.appendChild(document.createElement("button"));
+	position = position.lastChild;
+	position.className = "sectionButton";
+	//position.onclick = addSection(this);
+	position.innerHTML = "Add Section";
+	
+	//adding <div class = "sectionButtonContainer">
+	position = position.parentNode.parentNode;
+	position.appendChild(document.createElement("div"));
+	position = position.lastChild;
+	position.className = "sectionBar";
+	position.innerHTML = ".";
 }
