@@ -51,7 +51,7 @@ function addSection(button) {
 	position.id = "Section_" + sectionCount;
 	
 	// Set the div to be an empty new section
-	position.innerHTML = "<div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"></div><div class = \"menuEditor\"></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addItemToThisSection(this);\"> Add Item</button></div></div>";
+	position.innerHTML = "<div class = \"sectionHeader\"><input class = \"sectionTitleInput\"> <div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionSaveButton\" onclick=\"saveName(this);\"> Save Name </button><button class = \"sectionButton\" onclick=\"renameSection(this);\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"></div><div class = \"menuEditor\"></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addItemToThisSection(this);\"> Add Item</button></div></div>";
 	
 	// Append the header for a new section
 	document.body.appendChild(document.createElement("div"));
@@ -113,6 +113,45 @@ function deleteSection(button) {
 	// Less aggressive option - hides the section.
 	//position.style.display = "none";
 }
+
+function renameSection(button) {
+	let position = button.parentNode.parentNode;
+	console.log(position.children);
+	
+	// Hide the rename button
+	button.style.display = 'none';
+	
+	// Display the save name button
+	button.parentNode.children[0].style.display = 'block';
+	
+	//console.log(position.children);
+	
+	// Display the input field (with the current name as the default text)
+	position.children[0].value = position.children[1].innerText;
+	position.children[0].style.display = 'block';
+	
+	// Hide the current title
+	position.children[1].style.display = 'none';
+}
+
+function saveName(button) {
+	let position = button.parentNode.parentNode;
+	console.log(position.children);
+	
+	// Hide the save name button
+	button.style.display = 'none';
+	
+	// Display the rename button
+	button.parentNode.children[1].style.display = 'block';
+	
+	// Hide the input field
+	position.children[0].style.display = 'none'
+	
+	// Show the new title
+	position.children[1].innerText = position.children[0].value;
+	position.children[1].style.display = 'block';
+}
+
 
 // Function to add an item to an existing menu section.
 function addItemToThisSection(button) {

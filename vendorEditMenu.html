@@ -17,11 +17,12 @@
 		</div>
 		<div class = "vendorMenu" id = "Section_1">
 			<div class = "sectionHeader">
-				<div class = "sectionTitle">
-					Section Title
+				<input class = "sectionTitleInput"> <div class = "sectionTitle">
+					 Section Title
 				</div>                           
 				<div class = "sectionButtonContainer">
-					<button class = "sectionButton"> Rename Section </button>
+					<button class = "sectionSaveButton" onclick="saveName(this);"> Save Name </button>
+					<button class = "sectionButton" onclick="renameSection(this);"> Rename Section </button>
 					<button class = "sectionButton" onclick="deleteSection(this);"> Delete Section </button>
 				</div>
 				<div class = "sectionBar"></div>

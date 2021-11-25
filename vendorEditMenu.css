@@ -48,6 +48,12 @@
 	font-size: 30px;
 	display: inline-block;
 }
+
+.sectionTitleInput {
+	font-size: 25px;
+	display: none;
+}
+
 .menuEditor {
 	/*background-color: #CBC3E3;*/
 	height: 700%;
@@ -196,6 +202,23 @@
 	font-size: 12px;
 	margin-right: 5%;
 	margin-top: 1%;
+}
+.sectionSaveButton{
+	display: none;
+	background-color: #007BFF;
+	border: none;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	color: white;
+	padding: 5px 10px;
+	text-align: center;
+	float: right;
+	font-size: 12px;
+	margin-right: 5%;
+	margin-top: 1%;
+	
 }
 .sectionButton:active {background-color: #064d80}
 #shopButton {
