@@ -1,110 +1,89 @@
-let lastItemIsRight = true;	//keeps track of if the last menu item is in the right or left position
-
 // Adds text entry for menu item attributes (name, price, calories)
-function addTextField(position) {
-	//Making save changes button visible
-	position = position.parentNode.childNodes[7];
-	position.style.display = 'block';
+function addTextFields(button) {
+	// Let position be the itemButtonContainer
+	let position = button.parentNode;
 	
-	//Making edit menu button invisible
-	position = position.parentNode.childNodes[1];
-	position.style.display = 'none';
+	// Hide the Edit Item Button
+	position.children[0].style.display = "none";
 	
+	// Show the Save Changes button
+	position.children[3].style.display = "block";
 	
-	//setting the position of current node to parent of all text fields
-	position = position.parentNode.parentNode.childNodes[1];
+	// Navigate to itemInfo div
+	position = position.parentNode.children[0];
 	
-	//displaying all hidden textfields
-	console.log(position.children);
-	position.childNodes[1].style.display = 'block';
-	position.childNodes[3].style.display = 'block';
-	position.childNodes[5].style.display = 'block';
+	// Make the current values hidden and display the input fields
+	// Makes input fields have the value of the current values
+	for (let i = 0; i < position.children.length; i++) {
+		if (i % 2 == 0) {
+			position.children[i].value = position.children[i+1].innerText;
+			position.children[i].style.display = 'block';
+		}
+		else {
+			position.children[i].style.display = 'none';
+		}
+	}
 }
 
 // Adds a new section to the menu
-// Craig's terrible version of Daniel's implementation
-// DO NOT USE IN FINAL VERSION - GOOD ENOUGH FOR DEMONSTRATION
-function addSection(button) {
-	let position = button.parentNode.parentNode;
+// Slightly less terrible Craig version
+function addSection(button) {	
+	// Navigates to the sectionNew vendorMenu
+	let position = button.parentNode.parentNode.parentNode;
 	
-	// New menu section HTML is set to template
-	position.outerHTML = "<div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"> . </div><div class = \"menuEditor\"><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div></div><div class = \"itemContainer\"><div class = \"leftMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name </div><input hidden> <div class = \"itemCalories\"> Calories </div><input hidden> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div><div class = \"rightMenuItem\"><div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input hidden> <div class = \"itemName\"> Food Name</div><input hidden> <div class = \"itemCalories\"> Calories</div><input hidden> <div class = \"itemPrice\"> Price</div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextField(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\"> Save Changes </button></div></div></div></div></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addMenuItem(this);\"> Add Item</button></div></div>";
+	// Destroy the new section
+	let newSection = position.outerHTML;
+	position.outerHTML = "";
+	
+	// Account for header, banner, backgroundStockImage, and script
+	let sectionCount = document.body.children.length - 4;
+	
+	//Increase by one, since we're adding a new section
+	sectionCount++;
+	
+	// Create a new div
+	document.body.appendChild(document.createElement("div"));
+	
+	// Move position to the new div
+	position = document.body.children[document.body.children.length - 1];
+	
+	position.className = "vendorMenu";
+	position.id = "Section_" + sectionCount;
+	
+	// Set the div to be an empty new section
+	position.innerHTML = "<div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\"> Rename Section </button><button class = \"sectionButton\" onclick=\"deleteSection(this);\"> Delete Section </button></div><div class = \"sectionBar\"></div><div class = \"menuEditor\"></div><div class = \"addItemContainer\"><button class = \"itemButton\" onclick=\"addItemToThisSection(this);\"> Add Item</button></div></div>";
 	
 	// Append the header for a new section
 	document.body.appendChild(document.createElement("div"));
-	console.log(position.outerHTML);
 	position = document.body.lastChild;
-	console.log(position.outerHTML);
-	position.outerHTML = "<div class = \"vendorMenu\"><div class = \"sectionHeader\"><div class = \"sectionTitle\">Section Title</div><div class = \"sectionButtonContainer\"><button class = \"sectionButton\" onclick = \"addSection(this);\"> Add Section </button></div><div class = \"sectionBar\"> . </div></div></div>";
+	position.outerHTML = newSection;
 }
 
-//this function works the first time, but every subsequent case does not
-function saveChanges(position) {
-	//setting position of node to "itemInfo"
-	position = position.parentNode.parentNode.childNodes[1];
+// Saves the changes made after editing an item
+function saveChanges(button) {
+	// Let position be the itemButtonContainer
+	let position = button.parentNode;
 	
-	let nameStr = position.childNodes[1].value;
-	let caloriesStr = position.childNodes[5].value;
-	let priceStr = position.childNodes[9].value;
+	// Hide the Save Changes button
+	position.children[3].style.display = "none";
 	
-	//destroying <div class = "itemInfo">
-	position = position.parentNode;
-	position.childNodes[1].remove();
+	// Show the Edit Item Button
+	position.children[0].style.display = "block";
 	
-	console.log(position);
-	//adding <div class = "itemInfo">
-	position.insertBefore(document.createElement("div"), position.firstChild);
-	position = position.firstChild;
-	position.className = "itemInfo";
+	// Navigate to itemInfo div
+	position = position.parentNode.children[0];
 	
-	console.log(position);
-	//adding <input hidden>
-	position.appendChild(document.createElement("input"));
-	position = position.lastChild;
-	position.style.display = 'none';
-	console.log(position);
-	
-	//adding <div class = "itemName">
-	position = position.parentNode;
-	position.appendChild(document.createElement("div"));
-	position = position.lastChild;
-	position.className = "itemName";
-	position.innerHTML = nameStr;
-	console.log(position);
-	
-	//adding <input hidden>
-	position = position.parentNode;
-	position.appendChild(document.createElement("input"));
-	position = position.lastChild;
-	position.style.display = 'none';
-	console.log(position);
-	
-	//adding <div class = "itemCalories">
-	position = position.parentNode;
-	position.appendChild(document.createElement("div"));
-	position = position.lastChild;
-	position.className = "itemCalories";
-	position.innerHTML = caloriesStr;
-	console.log(position);
-	
-	//adding <input hidden>
-	position = position.parentNode;
-	position.appendChild(document.createElement("input"));
-	position = position.lastChild;
-	position.style.display = 'none';
-	
-	//adding <div class = "itemPrice">
-	position = position.parentNode;
-	position.appendChild(document.createElement("div"));
-	position = position.lastChild;
-	position.className = "itemPrice";
-	position.innerHTML = priceStr;
-	
-	//fixing buttons
-	position = position.parentNode.parentNode.childNodes[3];
-	position.childNodes[1].style.display = 'block';
-	position.childNodes[7].style.display = 'none';
-	
+	// Saves the values from the input fields
+	// and makes the input fields no longer visible
+	for (let i = 0; i < position.children.length; i++) {
+		if (i % 2 == 0) {
+			position.children[i].style.display = 'none';
+		}
+		else {
+			position.children[i].innerText = position.children[i-1].value;
+			position.children[i].style.display = 'block';
+		}
+	}
 }
 
 // Function to "delete" a menu item
@@ -138,9 +117,14 @@ function deleteSection(button) {
 // Function to add an item to an existing menu section.
 function addItemToThisSection(button) {
 	
-	// Gets the last itemContainer in the menu section.
-	let prevItemContainer = button.parentNode.previousSibling.previousSibling.lastElementChild;
 	let menuEditor = button.parentNode.parentNode.children[3];
+	let itemContainerCount = menuEditor.children.length;
+	let prevItemContainer;
+	
+	// Gets the last itemContainer in the menu section.
+	if (itemContainerCount > 0) {
+		prevItemContainer = menuEditor.children[menuEditor.children.length - 1];
+	}	
 	
 	let sectionID = menuEditor.parentNode.parentNode.id;
 	let sectionNum = sectionID.substring(8, sectionID.length);
@@ -156,7 +140,7 @@ function addItemToThisSection(button) {
 	}
 	
 	// If the itemContainer is full, add a new one with a single item.
-	if (prevItemContainer.children.length == 2)
+	if (itemContainerCount == 0 || prevItemContainer.children.length == 2)
 	{
 		// Add a new itemContainer div to the menuEditor
 		menuEditor.appendChild(document.createElement("div"));
@@ -192,7 +176,7 @@ function addItemToThisSection(button) {
 	position.id = "MenuItem_" + sectionNum + "_" + length;
 	console.log(position.id);
 		
-	position.innerHTML = "<div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><div class = \"itemName\"> Food Name </div><div class = \"itemCalories\"> Calories </div><div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\"> Edit Item </button><button class = \"itemButton\"> Delete Item </button><button class = \"redButton\"> Mark Unavailable </button></div></div>";
+	position.innerHTML = "<div class = \"menuItemImage\">Food photo goes here</div><div class = \"menuItemInfo\"><div class = \"itemInfo\"><input class = \"nameInput\"> <div class = \"itemName\"> Food Name </div><input class = \"calInput\"> <div class = \"itemCalories\"> Calories </div><input class = \"priceInput\"> <div class = \"itemPrice\"> Price </div></div><div class = \"itemButtonContainer\"><button class = \"itemButton\" onclick = \"addTextFields(this);\"> Edit Item </button><button class = \"itemButton\" onclick=\"deleteMenuItem(this);\"> Delete Item </button><button class = \"redButton\" > Mark Unavailable </button><button hidden class = \"itemButton\" onclick=\"saveChanges(this);\">Save Changes </button></div></div>";
 	
 	console.log("ITEM ADDED");
 }
@@ -266,5 +250,3 @@ function addMenuItem(sectionNumber, itemNumber, foodName, calories, price) {
 	
 	console.log("ITEM ADDED");
 }
-
-

@@ -24,7 +24,7 @@
 					<button class = "sectionButton"> Rename Section </button>
 					<button class = "sectionButton" onclick="deleteSection(this);"> Delete Section </button>
 				</div>
-				<div class = "sectionBar"> . </div>
+				<div class = "sectionBar"></div>
 				<div class = "menuEditor">
 					<div class = "itemContainer">
 						<div class = "leftMenuItem">
@@ -33,12 +33,12 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<input hidden> <div class = "itemName"> Food Name </div>
-									<input hidden> <div class = "itemCalories"> Calories </div>
-									<input hidden> <div class = "itemPrice"> Price </div>
+									<input class = "nameInput"> <div class = "itemName"> Food Name </div>
+									<input class = "calInput"> <div class = "itemCalories"> Calories </div>
+									<input class = "priceInput"> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick = "addTextFields(this);"> Edit Item </button>
 									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
 									<button class = "redButton" > Mark Unavailable </button>
 									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
@@ -51,12 +51,12 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<input hidden> <div class = "itemName"> Food Name </div>
-									<input hidden> <div class = "itemCalories"> Calories </div>
-									<input hidden> <div class = "itemPrice"> Price </div>
+									<input class = "nameInput"> <div class = "itemName"> Food Name </div>
+									<input class = "calInput"> <div class = "itemCalories"> Calories </div>
+									<input class = "priceInput"> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick = "addTextFields(this);"> Edit Item </button>
 									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
 									<button class = "redButton" > Mark Unavailable </button>
 									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
@@ -71,12 +71,12 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<input hidden> <div class = "itemName"> Food Name </div>
-									<input hidden> <div class = "itemCalories"> Calories </div>
-									<input hidden> <div class = "itemPrice"> Price </div>
+									<input class = "nameInput"> <div class = "itemName"> Food Name </div>
+									<input class = "calInput"> <div class = "itemCalories"> Calories </div>
+									<input class = "priceInput"> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick = "addTextFields(this);"> Edit Item </button>
 									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
 									<button class = "redButton" > Mark Unavailable </button>
 									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
@@ -89,12 +89,12 @@
 							</div>
 							<div class = "menuItemInfo">
 								<div class = "itemInfo">
-									<input hidden> <div class = "itemName"> Food Name</div>
-									<input hidden> <div class = "itemCalories"> Calories</div>
-									<input hidden> <div class = "itemPrice"> Price</div>
+									<input class = "nameInput"> <div class = "itemName"> Food Name </div>
+									<input class = "calInput"> <div class = "itemCalories"> Calories </div>
+									<input class = "priceInput"> <div class = "itemPrice"> Price </div>
 								</div>
 								<div class = "itemButtonContainer">
-									<button class = "itemButton" onclick = "addTextField(this);"> Edit Item </button>
+									<button class = "itemButton" onclick = "addTextFields(this);"> Edit Item </button>
 									<button class = "itemButton" onclick="deleteMenuItem(this);"> Delete Item </button>
 									<button class = "redButton" > Mark Unavailable </button>
 									<button hidden class = "itemButton" onclick="saveChanges(this);"> Save Changes </button>
@@ -116,7 +116,7 @@
 				<div class = "sectionButtonContainer">
 					<button class = "sectionButton" onclick = "addSection(this);"> Add Section </button>
 				</div>
-				<div class = "sectionBar"> . </div>
+				<div class = "sectionBar"></div>
 			</div>
 		</div>
 		<script src = "vendorEditMenu.js"></script>
