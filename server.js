@@ -88,11 +88,7 @@ app.post("/", function(req, res){
   login_register(req, res, "user");
 });
 
-//User Account page
-app.get("/userAccount", function(req, res){
-  let obj;
-  res.render("userAccountInfo", { data:JSON.stringify(obj) });
-});
+
 
 app.post("/userAccount", function(req, res) {
   console.log("im in post!");
@@ -137,7 +133,8 @@ app.get("/require.js", function(req, res) {
 });
 
 // serve the user account page
-app.get("/userAccountInfo", function(req, res) {
+//User Account page
+app.get("/userAccount", function(req, res) {
 
   let profile, order, ticket;
 
@@ -165,7 +162,7 @@ app.get("/userAccountInfo", function(req, res) {
         console.log(userProfile.o[0]);
         console.log(userProfile.o[1]);
 
-        res.render("userLogin");
+        res.render("userLogin", {data: JSON.stringify(userProfile)});
       });
     });
   });
