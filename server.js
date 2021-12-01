@@ -88,6 +88,24 @@ app.post("/", function(req, res){
   login_register(req, res, "user");
 });
 
+//User Account page
+app.get("/userAccount", function(req, res){
+  let obj;
+  res.render("userAccountInfo", { data:JSON.stringify(obj) });
+});
+
+app.post("/userAccount", function(req, res) {
+  console.log("im in post!");
+  let email = req.body.email;
+  let name = req.body.name;
+  let password = req.body.password;
+  let address = req.body.address;
+
+  console.log(email);
+  console.log(name);
+  console.log(password);
+  console.log(address);
+});
 // vendor login/register page
 app.get("/vendorLogin", function(request, response) {
   response.render("vendorLogin");
