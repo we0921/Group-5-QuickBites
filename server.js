@@ -88,20 +88,12 @@ app.post("/", function(req, res){
   login_register(req, res, "user");
 });
 
-
-
-app.post("/userAccount", function(req, res) {
-  console.log("im in post!");
-  let email = req.body.email;
-  let name = req.body.name;
-  let password = req.body.password;
-  let address = req.body.address;
-
-  console.log(email);
-  console.log(name);
-  console.log(password);
-  console.log(address);
+//User Account page
+app.get("/userAccount", function(req, res){
+  let obj;
+  res.render("userAccountInfo", { data:JSON.stringify(obj) });
 });
+
 // vendor login/register page
 app.get("/vendorLogin", function(request, response) {
   response.render("vendorLogin");
@@ -133,8 +125,7 @@ app.get("/require.js", function(req, res) {
 });
 
 // serve the user account page
-//User Account page
-app.get("/userAccount", function(req, res) {
+app.get("/userAccountInfo", function(req, res) {
 
   let profile, order, ticket;
 
@@ -162,12 +153,24 @@ app.get("/userAccount", function(req, res) {
         console.log(userProfile.o[0]);
         console.log(userProfile.o[1]);
 
-        res.render("userLogin", {data: JSON.stringify(userProfile)});
+        res.render("userLogin");
       });
     });
   });
 });
 
+app.post("/userAccount", function(req, res) {
+  console.log("im in post!");
+  let email = req.body.email;
+  let name = req.body.name;
+  let password = req.body.password;
+  let address = req.body.address;
+
+  console.log(email);
+  console.log(name);
+  console.log(password);
+  console.log(address);
+});
 
 app.listen(3000, function() {
   console.log("server is running");
@@ -394,7 +397,7 @@ function login_register(req, res, type){
           });
           ticket.save();
           ticket2.save();
-
+      
           res.render("userLogin");
         }
       }
