@@ -13,20 +13,17 @@ const profileSchema = new mongoose.Schema({
   email: String,
   password: String,
   restaurant: String,
-  approved: Boolean
+  approved: Boolean,
+  address: String
 });
-
-// const activeSchema = new mongoose.Schema({
-//   type: String,
-//   email: String
-// });
 
 const itemSchema = new mongoose.Schema({
   name: String,
   calories: Number,
   price: Number,
   image: String,
-  availability: Boolean
+  availability: Boolean,
+  quantity: Number
 });
 
 const sectionSchema = new mongoose.Schema({
@@ -39,185 +36,81 @@ const menuSchema = new mongoose.Schema({
   sections: [sectionSchema]
 });
 
-// create and/or put schema into collection
+const orderSchema = new mongoose.Schema({
+  userName: String,
+  userEmail: String,
+  vendorName: String,
+  vendorEmail: String,
+  items: [itemSchema],
+  status: Boolean,
+  image: String,
+  specialRequest: String
+});
+
+const ticketSchema = new mongoose.Schema({
+  ownerName: String,
+  ownerEmail: String,
+  receiverName: String,
+  receiverEmail: String,
+  title: String,
+  body: String,
+  type: String,
+  status: Boolean
+});
+
+// create and/or put schemas into collection
 const Menu = mongoose.model("Menu", menuSchema);
+const Order = mongoose.model("Order", orderSchema);
+const Ticket = mongoose.model("Ticket", ticketSchema);
 
-// create and/or put schema into collection
-// const Active = mongoose.model("Active", activeSchema);
-
+// email global variable
 let emailKey;
 
 // create and/or put schema into collection
 const Profile = mongoose.model("Profile", profileSchema);
 
 
-
 const userList = new Map();
 userList.set("test@gmail.com", "password");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public/"));
+
+// user login/register page
 app.get("/", function(request, response) {
-  // response.sendFile(__dirname + "/index.html");
-  response.render("index");
-  // response.sendFile(__dirname + "/userAccountInfo.html");
+  response.render("userLogin");
 });
 
-// login/register form has been submitted
-app.post("/", function(req, res) {
-  // check what got sent
-  console.log(req.body);
-  console.log(Object.keys(req.body));
-
-  // did the user login?
-  if (Object.keys(req.body).includes("loginBtn")) {
-    // grab the user email + password
-    let email = req.body.userEmail;
-    let password = req.body.userPassword;
-    console.log("user is logging in");
-    // does this user exist?
-    // scan all profiles
-    let userExists = false;
-    let passwordMatch = false;
-    console.log("up here");
-    Profile.find(function(err, profiles) {
-      console.log("here");
-      if (err) {
-        console.log(err);
-      } else {
-        profiles.forEach(function(profile) {
-          console.log(profile.email);
-          // if this is a vendor account
-          if (profile.type === "vendor") {
-            // if the email and password match what was given
-            if (profile.email === req.body.userEmail && profile.password === req.body.userPassword) {
-              console.log("User/Password exist, logging in...");
-              console.log("serving up restaurant edit page");
-              emailKey = profile.email;
-              // console.log(profileID);
-              res.redirect("/userAccountInfo");
-            }
-          }
-        });
-      }
-    });
-  }
-
-  // did the user register?
-  else if (Object.keys(req.body).includes("registerBtn")) {
-    console.log("user is registering");
-    console.log("old list");
-    console.log(userList.entries());
-    let email = req.body.registerEmail;
-    let password = req.body.registerPassword;
-
-
-    // check if the user exists already
-    if (userList.has(email)) {
-      console.log("User already exists");
-    } else {
-      userList.set(email, password);
-      console.log("new list");
-      console.log(userList.entries());
-
-      //put info into model
-      const profile = new Profile({
-        type: "vendor",
-        first: req.body.registerFirstName,
-        last: req.body.registerLastName,
-        email: req.body.registerEmail,
-        password: req.body.registerPassword,
-        restaurant: req.body.registerRestaurantName,
-        approved: 0
-      });
-      // insert record into profile table
-      profile.save();
-
-      //create a sample menu page
-      const menu = new Menu({
-        vendorEmail: req.body.registerEmail,
-        sections: [{
-            title: "Section1",
-            items: [{
-                name: "Food Name1",
-                calories: 123,
-                price: 9.99,
-                image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
-                availability: 1
-              },
-              {
-                name: "Food Name2",
-                calories: 456,
-                price: 9.99,
-                image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
-                availability: 1
-              },
-              {
-                name: "Food Name3",
-                calories: 789,
-                price: 9.99,
-                image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
-                availability: 1
-              },
-              {
-                name: "Food Name4",
-                calories: 100,
-                price: 9.99,
-                image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-                availability: 0
-              }
-            ]
-          },
-          {
-            title: "Section2",
-            items: [{
-              name: "Food Name4",
-              calories: 100,
-              price: 9.99,
-              image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-              availability: 0
-            }]
-          }
-        ]
-      });
-      //insert into database
-      menu.save();
-    }
-  }
-  // this shouldn't ever trigger
-  else {
-    console.log("how did you make this error?");
-  }
-  res.sendFile(__dirname + "/index.html");
+app.post("/", function(req, res){
+  login_register(req, res, "user");
 });
 
-app.get("/userAccountInfo", function(req, res) {
-  // delete any active user
-  // Active.deleteOne({
-  //   type: "vendor"
-  // }, function(err) {});
-  // const active = new Active({
-  //   type: "vendor",
-  //   email: emailKey
-  // });
-  // active.save();
-  // mongoose.connection.close();
+// vendor login/register page
+app.get("/vendorLogin", function(request, response) {
+  response.render("vendorLogin");
+});
+
+app.post("/vendorLogin", function(req, res) {
+  login_register(req, res, "vendor");
+});
+
+// serve the vendor edit menu page
+app.get("/vendorEditMenu", function(req, res) {
   Menu.find({email: emailKey}, function(err, menuItems){
-    let vendorMenu = menuItems[0].sections;
-    console.log(menuItems[0]);
-    console.log(menuItems[0].sections);
-    res.render("vendorEditMenu", {menu: vendorMenu});
+    if (err) console.log(err);
+    else {
+      let vendorMenu = menuItems[0].sections;
+      console.log(menuItems[0]);
+      console.log(menuItems[0].sections);
+      res.render("vendorEditMenu", {menu: vendorMenu});
+    }
   });
-  // res.sendFile(__dirname + "/vendorEditMenu2.html");
-
 });
 
+// serve js files when needed
 app.get("/vendorEditMenu.js", function(req, res) {
   res.sendFile(__dirname + "/vendorEditMenu2.js");
 });
@@ -225,25 +118,271 @@ app.get("/require.js", function(req, res) {
   res.sendFile(__dirname + "/require.js");
 });
 
-// app.get("/views/userAccountInfo.css", function(req, res){
-//   res.sendFile(__dirname + "/views/userAccountInfo.css");
-// });
+// serve the user account page
+app.get("/userAccountInfo", function(req, res) {
 
-app.post("/userAccountInfo", function(req, res) {
-  console.log(req.body);
-  // let food = req.body["food"];
-  // let cal = req.body["cal"];
-  // let price = req.body["price"];
+  let profile, order, ticket;
 
+  // grab the user profile
+  Profile.find({email: emailKey}, function(err, profiles){
+    if (err) console.log(err);
+    else profile = profiles[0];
 
-  res.sendFile(__dirname + "/userAccountInfo.html");
+    // grab the user orders
+    Order.find({userEmail: emailKey}, function(err, orders){
+      if (err) console.log(err);
+      else order = orders;
+
+      // grab the user tickets
+      Ticket.find({ownerEmail: emailKey}, function(err, tickets){
+        if (err) console.log(err);
+        else ticket = tickets;
+
+        // create an object to store all objects
+        const userProfile = {};
+        userProfile.p = profile;
+        userProfile.o = order;
+        userProfile.t = ticket;
+        console.log(userProfile);
+        console.log(userProfile.o[0]);
+        console.log(userProfile.o[1]);
+
+        res.render("userLogin");
+      });
+    });
+  });
 });
 
-
-// app.post("/delItem", function(req, res){
-//   console.log(req.body);
-// })
 
 app.listen(3000, function() {
   console.log("server is running");
 });
+
+function login_register(req, res, type){
+  // check what got sent
+  console.log(req.body);
+  console.log(Object.keys(req.body));
+
+  // grab email and password, from BOTH forms
+  let loginEmail = req.body.userEmail;
+  let registerEmail = req.body.registerEmail;
+  let loginPassword = req.body.userPassword;
+
+  // did the person login?
+  if (Object.keys(req.body).includes("loginBtn")){
+
+    // does this person already exist?
+    Profile.find({email: loginEmail, password: loginPassword},function(err, profiles){
+      if (err) console.log(err);
+
+      // person exists
+      else if (profiles.length != 0){
+        emailKey = profiles[0].email;
+
+        // check if profile type matches the one of the login attempt
+        if (type === "vendor" && profiles[0].type === "vendor") res.redirect("/vendorEditMenu");
+        else if (type === "user" && profiles[0].type === "user") res.redirect("/userAccountInfo");
+        else if (type === "admin" && profiles[0].type === "admin") res.redirect("/adminHome");
+        else {
+          if (type === "vendor") res.render("vendorLogin");
+          else if (type === "user") res.render("userLogin");
+          else res.render("adminLogin");
+        }
+      }
+      // otherwise this person doesnt exist and we can send them back to the login
+      else{
+        if (type === "vendor") res.render("vendorLogin");
+        else res.render("userLogin");
+      }
+    });
+  }
+  // did the person register?
+  else if (Object.keys(req.body).includes("registerBtn")){
+
+    // does the person already exist?
+    Profile.find({email: registerEmail}, function(err, profiles){
+      if (err) console.log(err);
+
+      // if they do, send them back to the login screen
+      else if (profiles.length != 0){
+        if (type === "vendor") res.render("vendorLogin");
+        else res.render("userLogin");
+      }
+      // otherwise let them register
+      else {
+        // check who is registering
+        if (type === "vendor"){
+          //put info into model
+          const profile = new Profile({
+            type: "vendor",
+            first: req.body.registerFirstName,
+            last: req.body.registerLastName,
+            email: req.body.registerEmail,
+            password: req.body.registerPassword,
+            restaurant: req.body.registerRestaurantName,
+            approved: 0,
+            address: ""
+          });
+          // insert record into profile table
+          profile.save();
+
+          //create a sample menu page
+          const menu = new Menu({
+            vendorEmail: req.body.registerEmail,
+            sections: [{
+                title: "Section1",
+                items: [{
+                    name: "Food Name1",
+                    calories: 123,
+                    price: 9.99,
+                    image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Food Name2",
+                    calories: 456,
+                    price: 9.99,
+                    image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Food Name3",
+                    calories: 789,
+                    price: 9.99,
+                    image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Food Name4",
+                    calories: 100,
+                    price: 9.99,
+                    image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+                    availability: 0,
+                    quantity: 1
+                  }
+                ]
+              },
+              {
+                title: "Section2",
+                items: [{
+                  name: "Food Name5",
+                  calories: 100,
+                  price: 9.99,
+                  image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+                  availability: 0,
+                  quantity: 0
+                }]
+              }
+            ]
+          });
+          //insert into database
+          menu.save();
+          res.render("vendorLogin");
+        }
+        // otherwise a user is trying to register
+        else {
+          //put info into model
+          const profile = new Profile({
+            type: "user",
+            first: req.body.registerFirstName,
+            last: req.body.registerLastName,
+            email: req.body.registerEmail,
+            password: req.body.registerPassword,
+            restaurant: "",
+            approved: 0,
+            address: req.body.registerAddress
+          });
+          // insert record into profile table
+          profile.save();
+
+          // create default orders and tickets
+          const order = new Order({
+            userName: req.body.registerFirstName,
+            userEmail: req.body.registerEmail,
+            vendorName: "McRonalds",
+            vendorEmail: "McRonalds@gmail.com",
+            items: [
+              {
+                name: "McFries",
+                calories: 345,
+                price: 9.99,
+                image: "",
+                availability: 1,
+                quantity: 5
+              },
+              {
+                name: "McShake",
+                calories: 789,
+                price: 5.99,
+                image: "",
+                availability: 1,
+                quantity: 2
+              },
+              {
+                name: "McPatty",
+                calories: 420,
+                price: 6.09,
+                image: "",
+                availability: 1,
+                quantity: 3
+              }
+            ],
+            status: 1,
+            image: "",
+            specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
+          });
+          const order2 = new Order({
+            userName: req.body.registerFirstName,
+            userEmail: req.body.registerEmail,
+            vendorName: "Burger God",
+            vendorEmail: "burgerGod@gmail.com",
+            items: [
+              {
+                name: "McFries",
+                calories: 345,
+                price: 9.99,
+                image: "",
+                availability: 1,
+                quantity: 5
+              }
+            ],
+            status: 0,
+            image: "",
+            specialRequest: "Please give me EXACTLY ONE FRY!!!"
+          });
+          order.save();
+          order2.save();
+
+          // create sample tickets
+          const ticket = new Ticket({
+            ownerName: req.body.registerFirstName,
+            ownerEmail: req.body.registerEmail,
+            receiverName: "McRonald",
+            receiverEmail: "McRonalds@gmail.com",
+            title: "BEST PLACE EVAAAA!!!!",
+            body: "OH MY GOD THIS PLACE IS SO GGUUUUUDDDD UGHHHHHHHHH XDDD",
+            type: "user",
+            status: 1
+          });
+          const ticket2 = new Ticket({
+            ownerName: req.body.registerFirstName,
+            ownerEmail: req.body.registerEmail,
+            receiverName: "BurgerGod",
+            receiverEmail: "burgerGod@gmail.com",
+            title: "this place suxxxxxxx :P",
+            body: "I would rate this place 1/17 brownie points. Not my mug of eggnog",
+            type: "user",
+            status: 0
+          });
+          ticket.save();
+          ticket2.save();
+
+          res.render("userLogin");
+        }
+      }
+    });
+  }
+}
