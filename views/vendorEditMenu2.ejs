@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel = "stylesheet" href ="css/vendorEditMenu.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title>Vendor Edit Menu</title>
+  </head>
+  <body>
+    <div id = "backgroundStockImage">
+      stock image goes here
+    </div>
+    <!-- for each section -->
+    <div class="container-fluid">
+    <% menu.forEach(function(section){ %>
+      <div class="row justify-content-center sectionCard">
+        <div class = "sectionHeader">
+          <div class = "sectionTitle">
+            <%=section.title%>
+          </div>
+          <div class = "sectionButtonContainer">
+  					<button class = "sectionButton" onclick="editSection(this)"> Rename Section </button>
+  					<button class = "sectionButton" onclick="deleteSection(this)"> Delete Section </button>
+            <button class = "sectionButton" onclick="addItem(this)"> Add Item </button>
+  				</div>
+          <div class = "sectionBar">. </div>
+        </div>
+        <%# for each item %>
+        <% let counter = 0; %>
+        <% let rowClosed; %>
+        <% section.items.forEach(function(item){ %>
+          <%# if we hit a third item, create a new row %>
+          <% if (counter % 2 == 0) { %>
+            <div class="row justify-content-center">
+              <% rowClosed = false;%>
+          <%}%>
+          <!-- start of item card -->
+          <div class="col-sm itemCard">
+            <div class="card mb-3" style="width: 30rem;">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="" alt="Card image cap" class="card-img-top">
+                </div>
+                <div class="col-md-8">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><%=item.name%></li>
+                    <li class="list-group-item"><%=item.calories%></li>
+                    <li class="list-group-item"><%=item.price%></li>
+                  </ul>
+                  <div class="row">
+                    <div class="col-sm">
+                      <button type="button" class="btn btn-primary" name="button" onclick = "deleteitem1(this)">Delete Item</button>
+                    </div>
+                    <div class="col-sm">
+                      <button type="button" class="btn btn-primary" name="button" onclick = "editItem1(this)">Edit Item</button>
+                    </div>
+                    <div class="col-sm">
+                      <%if (item.status){%>
+                      <button type="button" class="btn btn-danger" name="button" onclick = "markUnavailable(this)">Mark Unavailable</button>
+                      <%} else {%>
+                      <button type="button" class="btn btn-danger" name="button" onclick = "markUnavailable(this)">Mark Available</button>
+                      <%}%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- end of item card -->
+            <% if (counter % 2 == 1) { %>
+              <% rowClosed = true; %>
+              </div>
+            <%}%>
+            <% counter++; %>
+          <%});%>
+          <% if (!rowClosed) { %>
+            <!-- </div> -->
+          <%}%>
+          </div>
+
+        <%});%>
+        </div>
+        <!-- add section button -->
+        <div>
+          <button class = "btn btn-warning" onclick="addSection()"> Add Section </button>
+        </div>
+    </div>
+    <form style = "display:none" id = "post1" action = "/vendorEditMenu" method = "post">
+      <input type = "text" name = "menu">
+    </form>
+    <script>
+    let nameInput;
+    let caloriesInput;
+    let priceInput;
+
+    let sectionInput;
+    function savePage() {
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          items.push(item);
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      console.log(menu);
+
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+    function deleteitem1(button) {
+      console.log("im in delete");
+      let card = button.parentNode.parentNode.parentNode.firstElementChild;
+      let cardName = card.children[0].innerHTML;
+      let cardCalories = card.children[1].innerHTML;
+      let cardPrice = card.children[2].innerHTML;
+
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      let menu = [];
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        console.log(menuSection.title);
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          if ((item.Name == cardName) && (item.Calories == cardCalories) && (item.Price == cardPrice)){
+          }
+          else {
+            items.push(item);
+          }
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      console.log("next line is menu object");
+      console.log(menu);
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+    function editItem(button) {
+      let card = button.parentNode.parentNode.parentNode.firstElementChild;
+      let cardName = card.children[0].innerHTML;
+      let cardCalories = card.children[1].innerHTML;
+      let cardPrice = card.children[2].innerHTML;
+
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          if (item.Name == nameInput && item.Calories == caloriesInput && item.Price == priceInput) {
+            item.Name = cardName;
+            item.Calories = cardCalories;
+            item.Price = cardPrice;
+          }
+          items.push(item);
+
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      console.log(menu);
+
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+    function editItem1(button) {
+      let container = button.parentNode.parentNode.parentNode.children[0];
+
+      //getting all values in card
+      let name = container.children[0].innerHTML;
+      let calories = container.children[1].innerHTML;
+      let price = container.children[2].innerHTML;
+
+      let nameInput = name;
+      let caloriesInput = calories;
+      let priceInput = price;
+
+      //removing all nodes from container
+      container.innerHTML = '';
+
+      //adding edit name field
+      container.appendChild(document.createElement("input"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.value = name;
+
+      container.appendChild(document.createElement("input"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.value = calories;
+
+      container.appendChild(document.createElement("input"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.value = price;
+
+      //changing button
+      button.innerHTML = "Save Changes";
+      button.setAttribute("onclick", "saveChanges(this)");
+      editItem(button);
+    }
+    function saveChanges(button) {
+      let container = button.parentNode.parentNode.parentNode.children[0];
+
+      //getting all values in input fields
+      let name = container.children[0].value;
+      let quantity = container.children[1].value;
+      let price = container.children[2].value;
+
+      //removing all nodes from container
+      container.innerHTML = '';
+
+      //adding edit name field
+      container.appendChild(document.createElement("div"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.innerHTML = name;
+
+      container.appendChild(document.createElement("div"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.innerHTML = quantity;
+
+      container.appendChild(document.createElement("div"))
+      container.lastChild.className="list-group-item";
+      container.lastChild.innerHTML = price;
+
+      //changing button
+      button.innerHTML = "Edit Item";
+      button.setAttribute("onclick", "editItem1(this)");
+      editItem(button);
+    }
+    function editSection(button) {
+      let sectionTitle = button.parentNode.parentNode.firstElementChild;
+
+      //getting name of section
+      let name = sectionTitle.innerHTML.trim();
+      sectionInput = name;
+      //clearing title
+      sectionTitle.innerHTML = "";
+
+      sectionTitle.appendChild(document.createElement("input"));
+      sectionTitle.lastChild.value = name;
+
+      button.innerHTML = "Save Changes";
+      button.setAttribute("onclick", "saveSection(this)");
+    }
+    function saveSection(button) {
+      let sectionTitle = button.parentNode.parentNode.firstElementChild;
+
+      //getting name of section
+      let name = sectionTitle.firstElementChild.value.trim();
+
+      //clearing title
+      sectionTitle.innerHTML = name;
+
+      button.innerHTML = "Rename Section";
+      button.setAttribute("onclick", "editSection(this)");
+      savePage();
+    }
+    function deleteSection(button) {
+      let sectionTitle = button.parentNode.parentNode.firstElementChild.innerHTML;
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        if (menuSection.title == sectionTitle) {
+          return;
+        }
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          items.push(item);
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      console.log(menu);
+
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+    function addSection() {
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          items.push(item);
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      menu.push({title: 'newSection', items: []});
+      console.log(menu);
+
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+
+    function markUnavailable(button) {
+      let status = button.innerHTML;
+      let container = button.parentNode.parentNode.parentNode.firstElementChild;
+      let name = container.children[0];
+      let calories = container.children[1];
+      let price = container.children[2];
+      if (status == "Mark Unavailable") {
+        button.innerHTML = "Mark Available";
+        markUnavailablePage(false, name, calories, price);
+      }
+      else {
+        button.innerHTML = "Mark Unavailable";
+        markUnavailablePage(true, name, calories, price);
+      }
+    }
+    function markUnavailablePage(status, name, calories, price) {
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          if (item.Name == name && item.Calories == calories && item.Price == price) {
+            item.Status = status;
+          }
+          else {
+            if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+              item.Status = true;
+            }
+            else {
+              item.Status = false
+            }
+          }
+
+          items.push(item);
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        menu.push(menuSection);
+      }
+      console.log(menu);
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+    function addItem(button) {
+      let title = button.parentNode.parentNode.children[0].innerHTML;
+      let menu = [];
+      let sections = document.getElementsByClassName("sectionCard");
+      let sectionslength = sections.length;
+      //looping through each section
+      for (let i = 0; i < sectionslength; i++) {
+        //getting all items in each section
+        let itemsp = sections[i].getElementsByClassName("itemCard");
+
+        let itemslength;
+        let menuSection = {};
+        menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
+        let items = [];
+
+        let itemsCounter = 0; //items counter
+
+        //loop through each item
+        Array.from(itemsp).forEach(function(foodItem){
+          let item = {};
+
+          //getting all information related to items
+          item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
+          item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
+          item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+
+          items.push(item);
+          itemsCounter++;
+        });
+        menuSection.items = items;
+        if (title == menuSection.title) {
+          menuSection.push({name:"newfooditem", calories:0, price:0.00, availability:true});
+        }
+        menu.push(menuSection);
+      }
+      console.log(menu);
+
+      let postreq = document.getElementById("post1");
+
+      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.submit();
+    }
+
+    /*
+    function deleteItem(button) {
+      //getting card container
+      let itemCard = button;
+      for (let i = 0; i < 6; i++) {
+        itemCard = itemCard.parentNode;
+      }
+      deleteItemHelper(itemCard);
+    }
+    function deleteItemHelper(card) {
+      console.log("in deleteItemhelper");
+      //if right card exists
+      if(card.nextElementSibling) {
+        //getting card holding itemname, quantity, and price
+        let currentCard = card.firstElementChild.firstElementChild.lastElementChild.firstElementChild;
+
+        //getting next card holding itemname, quantity, and price
+        let nextCard = card.nextElementSibling.firstElementChild.firstElementChild.lastElementChild.firstElementChild;
+
+        //setting current card values to next card values
+        currentCard.children[0].innerHTML = nextCard.children[0].innerHTML; //name
+        currentCard.children[1].innerHTML = nextCard.children[1].innerHTML; //quantity
+        currentCard.children[2].innerHTML = nextCard.children[2].innerHTML; //price
+
+        deleteItemHelper(card.nextElementSibling);
+      }
+      else {
+
+        //right card doesnt exist, so checking if next row exists
+        let row = card.parentElementNode.nextElementSibling;
+        if(row) {
+          //check if left child exists
+          if(row.firstElementChild) {
+            //getting node of left card in next row
+            let nextCard = row.firstElementChild;
+
+            //containers holding the values of each card
+            let nextCardValues = nextCard.firstElementChild.firstElementChild.lastElementChild.firstElementChild;
+            let currentCardValues = card.firstElementChild.firstElementChild.lastElementChild.firstElementChild;
+
+            //setting current card values to next card values
+            currentCardValues.children[0].innerHTML = nextCardValues.children[0].innerHTML; //name
+            currentCardValues.children[1].innerHTML = nextCardValues.children[1].innerHTML; //quantity
+            currentCardValues.children[2].innerHTML = nextCardValues.children[2].innerHTML; //price
+            deleteItemHelper(nextCard);
+          }
+        }
+        //next row doesnt exist, so delete current card
+        else {
+          if()
+        }
+      }
+    }*/
+    </script>
+  </body>
+</html>
