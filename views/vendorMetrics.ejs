@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+      <%-include("partials/vendorLoginHeader")-%>
+      <div id = "backgroundStockImage">
+        stock image goes here
+      </div>
+
+      <h1 class="display-1"><%=metrics.menu.vendorName + " Metrics Page"%></h1>
+
+      <!-- this table will display the number of times each individual item was ordered -->
+      <%const h = new Map();  %>
+      <%let totalRevenue = 0; %>
+      <%let totalOrders = 0;%>
+      <%# for each section %>
+      <% metrics.menu.sections.forEach(function(section){ %>
+        <%# for each item in every section  %>
+          <%section.items.forEach(function(item){ %>
+            <%# add all items to the map %>
+            <%h.set(item.name, 0);%>
+          <%});%>
+      <%});%>
+
+      <%console.log(h);%>
+
+      <%# for each order belonging to the vendor %>
+      <% metrics.orders.forEach(function(order){ %>
+
+        <%totalOrders++;%>
+
+        <%# for each item within each order %>
+          <% order.items.forEach(function(item){ %>
+
+            <%totalRevenue += item.quantity * item.price;%>
+
+            <%#add the quantity ordered to our map%>
+            <%console.log(item.quantity);%>
+            <%console.log(parseInt(h.get(item.name)) + parseInt(item.quantity));%>
+            <%console.log(h.get(item.name))%>
+            <%console.log(item.name);%>
+            <% h.set(item.name, parseInt(h.get(item.name)) + parseInt(item.quantity)) %>
+          <%});%>
+      <%});%>
+      <%console.log(h);%>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"># of times ordered</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Item Price</th>
+            <th scope="col">Item Calories</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%# for each section %>
+          <% metrics.menu.sections.forEach(function(section){ %>
+            <%# for each item in every section  %>
+              <%section.items.forEach(function(item){ %>
+                <tr>
+                  <th scope="row"><%=h.get(item.name)%></th>
+                  <td><%=item.name%></td>
+                  <td><%=item.price%></td>
+                  <td><%=item.calories%></td>
+                </tr>
+              <%});%>
+          <%});%>
+        </tbody>
+      </table>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-6">
+            <h1><%="Total Revenue: $" + totalRevenue.toFixed(2)%></h1>
+          </div>
+          <div class="col-6">
+            <h1><%="Total Orders: " + totalOrders%></h1>
+          </div>
+        </div>
+      </div>
+  </body>
+</html>

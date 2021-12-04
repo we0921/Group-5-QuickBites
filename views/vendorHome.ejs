@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Restaurant Home</title>
+  <link rel="stylesheet" href="css/vendorHome.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+
+</head>
+
+<body>
+  <%-include("partials/vendorLoginHeader")-%>
+  <div class="container-fluid">
+    <div class="row justify-content-end">
+      <div class="col-4">
+        <a href="/vendorMetrics">
+          <button type="button" class="btn btn-danger vendorBtns" name="button">View Metrics</button>
+        </a>
+        <a href="/vendorEditMenu">
+          <button type="button" class="btn btn-primary vendorBtns" name="button">Edit Menu</button>
+        </a>
+        <a href="/vendorTicket">
+          <button type="button" class="btn btn-success vendorBtns" name="button">Submit a Ticket</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col-6">
+        <div id="orderHistoryContainer">
+          <h2 id="orderHistoryHeader">
+            <div class="headerFormat"> Current/Past Order History </div>
+          </h2>
+        </div>
+      </div>
+      <div class="col-4">
+        <div id="supportTicketsContainer">
+          <h2 id="accountInfoHeader">
+            <div class="headerFormat"> Support Tickets </div>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- // feedback from Server -->
+  <h1 style="display:none" id="ue"> <%=home%> </h1>
+
+  <!-- //javascript for page functionality -->
+  <script src="vendorHome.js"> </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let account = JSON.parse(document.getElementById("ue").innerHTML);
+      console.log(account);
+      console.log("HERE");
+
+      //Displaying user's order history
+      account.o.forEach(function(order) {
+        let name = order.userName;
+        let dish1, dish2, dish1Amount, dish2Amount, dish1price, dish2price;
+        let counter = 0;
+        order.items.forEach(function(item) {
+          if (counter == 0) {
+            dish1 = item.name;
+            dish1Amount = item.quantity;
+            dish1price = item.price;
+          } else if (counter == 1) {
+            dish2 = item.name;
+            dish2Amount = item.quantity;
+            dish2price = item.price;
+          }
+          counter++;
+        });
+        if (dish2 != null) buildOrderCard2(name, dish1, dish1Amount, dish2, dish2Amount, dish1price + dish2price);
+        else buildOrderCard1(name, dish1, dish1Amount, dish1price);
+      });
+      //displaying all of user's tickets
+      account.t.forEach(function(ticket) {
+        buildSupportTicket(ticket.receiverName, ticket.status, ticket.body);
+      });
+    });
+  </script>
+</body>
