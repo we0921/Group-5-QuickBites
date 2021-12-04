@@ -55,10 +55,10 @@
                       <button type="button" class="btn btn-primary" name="button" onclick = "editItem1(this)">Edit Item</button>
                     </div>
                     <div class="col-sm">
-                      <%if (item.status){%>
+                      <%if (item.availability){%>
                       <button type="button" class="btn btn-danger" name="button" onclick = "markUnavailable(this)">Mark Unavailable</button>
                       <%} else {%>
-                      <button type="button" class="btn btn-danger" name="button" onclick = "markUnavailable(this)">Mark Available</button>
+                      <button type="button" class="btn btn-success" name="button" onclick = "markUnavailable(this)">Mark Available</button>
                       <%}%>
                     </div>
                   </div>
@@ -85,9 +85,11 @@
           <button class = "btn btn-warning" onclick="addSection()"> Add Section </button>
         </div>
     </div>
-    <form style = "display:none" id = "post1" action = "/vendorEditMenu" method = "post">
+		<!-- rename section form -->
+    <form style = "display:none" id = "renameSection" action = "/vendorEditMenu" method = "post">
       <input type = "text" name = "menu">
     </form>
+
     <script>
     let nameInput;
     let caloriesInput;
@@ -118,7 +120,12 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           items.push(item);
           itemsCounter++;
         });
@@ -127,9 +134,9 @@
       }
       console.log(menu);
 
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
-      postreq.firstElementChild.value = JSON.stringify(menu);
+      postreq.children[0].value = JSON.stringify(menu);
       postreq.submit();
     }
     function deleteitem1(button) {
@@ -163,7 +170,12 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           if ((item.Name == cardName) && (item.Calories == cardCalories) && (item.Price == cardPrice)){
           }
           else {
@@ -176,7 +188,7 @@
       }
       console.log("next line is menu object");
       console.log(menu);
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
@@ -210,7 +222,12 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           if (item.Name == nameInput && item.Calories == caloriesInput && item.Price == priceInput) {
             item.Name = cardName;
             item.Calories = cardCalories;
@@ -225,12 +242,13 @@
       }
       console.log(menu);
 
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
     }
     function editItem1(button) {
+			console.log("ENTERING");
       let container = button.parentNode.parentNode.parentNode.children[0];
 
       //getting all values in card
@@ -261,7 +279,8 @@
       //changing button
       button.innerHTML = "Save Changes";
       button.setAttribute("onclick", "saveChanges(this)");
-      editItem(button);
+			console.log("Leaving");
+      // editItem(button);
     }
     function saveChanges(button) {
       let container = button.parentNode.parentNode.parentNode.children[0];
@@ -333,8 +352,11 @@
         let itemslength;
         let menuSection = {};
         menuSection.title = sections[i].children[0].children[0].innerHTML.trim();
-        if (menuSection.title == sectionTitle) {
-          return;
+        console.log(menuSection.title);
+        console.log(sectionTitle);
+        if (menuSection.title == sectionTitle.trim()) {
+          console.log(true);
+          continue;
         }
         let items = [];
 
@@ -348,7 +370,12 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           items.push(item);
           itemsCounter++;
         });
@@ -357,7 +384,7 @@
       }
       console.log(menu);
 
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
@@ -386,17 +413,24 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           items.push(item);
           itemsCounter++;
         });
         menuSection.items = items;
         menu.push(menuSection);
       }
-      menu.push({title: 'newSection', items: []});
+      // create a random string
+      let r = (Math.random() + 1).toString(36).substring(7);
+      menu.push({title: 'New Section ' + r, items: []});
       console.log(menu);
 
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
@@ -440,14 +474,14 @@
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
           if (item.Name == name && item.Calories == calories && item.Price == price) {
-            item.Status = status;
+            item.availability = status;
           }
           else {
             if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
-              item.Status = true;
+              item.availability = true;
             }
             else {
-              item.Status = false
+              item.availability = false
             }
           }
 
@@ -458,7 +492,7 @@
         menu.push(menuSection);
       }
       console.log(menu);
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
@@ -488,19 +522,29 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
-
+					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
+						item.availability = true;
+					}
+					else {
+						item.availability = false
+					}
           items.push(item);
           itemsCounter++;
         });
         menuSection.items = items;
-        if (title == menuSection.title) {
-          menuSection.push({name:"newfooditem", calories:0, price:0.00, availability:true});
+        console.log(title);
+        console.log(menuSection.title);
+        if (title.trim() == menuSection.title) {
+          console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+          // create a random string
+          let r = (Math.random() + 1).toString(36).substring(7);
+          items.push({Name:"Item " + r, Calories:0, Price:0.00, availability:true});
         }
         menu.push(menuSection);
       }
       console.log(menu);
 
-      let postreq = document.getElementById("post1");
+      let postreq = document.getElementById("renameSection");
 
       postreq.firstElementChild.value = JSON.stringify(menu);
       postreq.submit();
