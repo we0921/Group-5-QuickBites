@@ -4,58 +4,68 @@
 </head>
 <body id = "body">
 	<div id = "banner">
-			<h1 id = "logo">
-				QuickBites
-			</h1>
+			<img id = "QuickBitesLogo" src = "/pictures/QuickBites.png" object-fit = "contain" />
 		<div id = "bannerButtonContainer">
 			<button id = "shopButton"> Looking to Shop? </button>
 			<button id = "adminButton"> Admin Access </button>
 		</div>
 	</div>
-	<div id="accountInfoContainer">
-		<h2 id = "accountInfoHeader">
-			<div class = "headerFormat"> Your Account </div>
-		</h2>
-		<div class = "accountInfo">
-			<div class = "accountInfoFormat"> Email </div>
-		</div>
-		<div class = "accountInfo" id = "userEmail">
-			<div class = "accountInfoFormat"> insert email here </div>
-		</div>
-		<div class = "accountInfo">
-			<div class = "accountInfoFormat"> Name </div>
-		</div>
-		<div class = "accountInfo" id = "userName">
-			<div class = "accountInfoFormat"> insert name here </div>
-		</div>
-		<div class = "accountInfo">
-			<div class = "accountInfoFormat"> Password </div>
-		</div>
-		<div class = "accountInfo" id = "userPassword">
-			<div class = "accountInfoFormat"> insert password here </div>
-		</div>
-		<div class = "accountInfo">
-			<div class = "accountInfoFormat"> Address </div>
-		</div>
-		<div class = "accountInfo" id = "userAddress">
-			<div class = "accountInfoFormat"> insert address here </div>
-		</div>
-		<div class = "editInfoButtonContainer">
-			<button id = "editButtonID" class = "editButton">
-				Edit Information
-			</button>
-		</div>
-	</div>
-	<div id = "orderHistoryContainer">
-		<h2 id = "orderHistoryHeader">
-			<div class = "headerFormat"> Your Order History </div>
-		</h2>
-	</div>
-	<div id = "supportTicketsContainer">
-		<h2 id = "accountInfoHeader">
-			<div class = "headerFormat"> Support Tickets </div>
-		</h2>
-	</div>
+  <table class = "contentTable">
+    <tr>
+      <td class = accountInfoColumn>
+        <div id="accountInfoContainer">
+      		<h2 id = "accountInfoHeader">
+      			<div class = "headerFormat"> Your Account </div>
+      		</h2>
+      		<div class = "accountInfo">
+      			<div class = "accountInfoFormat"> Email </div>
+      		</div>
+      		<div class = "accountInfo" id = "userEmail">
+      			<div class = "accountInfoFormat"> insert email here </div>
+      		</div>
+      		<div class = "accountInfo">
+      			<div class = "accountInfoFormat"> Name </div>
+      		</div>
+      		<div class = "accountInfo" id = "userName">
+      			<div class = "accountInfoFormat"> insert name here </div>
+      		</div>
+      		<div class = "accountInfo">
+      			<div class = "accountInfoFormat"> Password </div>
+      		</div>
+      		<div class = "accountInfo" id = "userPassword">
+      			<div class = "accountInfoFormat"> insert password here </div>
+      		</div>
+      		<div class = "accountInfo">
+      			<div class = "accountInfoFormat"> Address </div>
+      		</div>
+      		<div class = "accountInfo" id = "userAddress">
+      			<div class = "accountInfoFormat"> insert address here </div>
+      		</div>
+      		<div class = "editInfoButtonContainer">
+      			<button id = "editButtonID" class = "editButton">
+      				Edit Information
+      			</button>
+      		</div>
+      	</div>
+      </td>
+
+      <td class = orderHistoryColumn>
+        <div id = "orderHistoryContainer">
+      		<h2 id = "orderHistoryHeader">
+      			<div class = "headerFormat"> Your Order History </div>
+      		</h2>
+      	</div>
+      </td>
+
+      <td class = supportTicketsColumn>
+        <div id = "supportTicketsContainer">
+      		<h2 id = "accountInfoHeader">
+      			<div class = "headerFormat"> Support Tickets </div>
+      		</h2>
+      	</div>
+      </td>
+    </tr>
+  </table>
   <form id = "post1" action = "/" method = "post">
     <input type = "text" name = "email">
     <input type = "text" name = "name">
