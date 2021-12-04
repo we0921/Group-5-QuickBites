@@ -1,39 +1,20 @@
 let dropDownMenu = document.getElementById("shoppingCartIcon");
+let object = JSON.parse(document.getElementById("serverData").innerHTML);
+
+
 dropDownMenu.addEventListener("mouseenter", displayShoppingCart());
 function search() {
+
   clearResults();
-  let obj = [
-    {
-      //_id: new ObjectId("61a6ddcda69228ffb85256a4"),
-      type: 'vendor',
-      first: 'John',
-      last: 'Smith',
-      email: '1@2.com',
-      password: '123',
-      restaurant: 'Blue Lobster',
-      approved: false,
-      address: '',
-      __v: 0
-    },
-    {
-      //_id: new ObjectId("61a6fcd7311aa0af88945e68"),
-      type: 'vendor',
-      first: 'asdf',
-      last: 'fdas',
-      email: 'asdf@sadf.com',
-      password: '123',
-      restaurant: 'Red Robingsss',
-      approved: false,
-      address: '',
-      __v: 0
-    }
-  ]
+  let obj = object;
   let entry = document.getElementById("searchStyle").value;
-  console.log(entry);
+
   if (entry != "") {
-    for (let i = 0; i < obj.length; i++) {
-      if (obj[i].restaurant.toLowerCase().includes(entry.toLowerCase())) {
-        displayRestaurant(obj[i].restaurant);
+    for (let i = 0; i < obj.menu.length; i++) {
+            // console.log(obj.menu[i].vendorName);
+      if (obj.menu[i].vendorName.toLowerCase().includes(entry.toLowerCase())) {
+
+        displayRestaurant(obj.menu[i]);
       }
     }
   }
@@ -42,14 +23,25 @@ function search() {
   }
 }
 
-function displayRestaurant(restaurant) {
+function displayRestaurant(menu) {
   let list = document.getElementById("restaurantResults");
   list.appendChild(document.createElement("div"));
   list.lastChild.className = "resultsContainer";
-  list.lastChild.innerHTML = restaurant;
+  list.lastChild.innerHTML = menu.vendorName;
+  var att = document.createAttribute("onclick");
+
+  att.value = "submitItem("+ "'" + menu.vendorEmail +"'" + ");";
+  list.lastChild.setAttributeNode(att);
+  // list.lastChild.onclick = "submitItem(this)";
+}
+function submitItem(email){
+  console.log("AYYA BOIH");
+  document.getElementById("post1").children[0].value = email;
+  console.log(document.getElementById("post1").children[0].value);
+  document.getElementById("post1").submit();
 }
 function displayItem(item, quantity, price) {
-  console.log(item +", " + quantity + ", " + price);
+  // console.log(item +", " + quantity + ", " + price);
 }
 function clearResults() {
   let restaurantList = document.getElementById("restaurantResults");
@@ -121,7 +113,8 @@ function removeCheckoutButton() {
   menu = menu.children[menu.children.length - 1];
   menu.lastChild.remove();
 }
-function buildVendorCard(name, image) {
+function buildVendorCard(name, image, email) {
+  let post = document.getElementById("post1");
   let advertise = document.getElementById("advertisementContainer");
   advertise.appendChild(document.createElement("div"));
   advertise.lastChild.className = "vendorCard";
@@ -137,7 +130,27 @@ function buildVendorCard(name, image) {
   advertise.lastChild.className = "restaurantName";
   advertise.lastChild.innerHTML = name;
 
+  advertise.appendChild(document.createElement("div"));
+  advertise.lastChild.innerHTML = email;
   advertise.appendChild(document.createElement("button"));
   advertise.lastChild.className = "btn btn-outline-primary";
   advertise.lastChild.innerHTML = "See Menu";
+
+  // advertise.appendChild(document.createElement("a"));
+  // advertise.lastChild.className = "btn btn-primary";
+  //    advertise.lastChild.href = "/" + email;
+
+  advertise.lastChild.setAttribute("onclick", "submitForm(this)");
+
+  // console.log(post.children[0].value);
+  // advertise.lastChild.addEventListener("click", submitForm(this));
+}
+function submitForm(button){
+  console.log("******************************");
+  console.log(button.previousElementSibling.innerHTML);
+    console.log("******************************");
+
+  document.getElementById("post1").children[0].value = button.previousElementSibling.innerHTML.trim();
+  console.log(document.getElementById("post1").children[0].value);
+  document.getElementById("post1").submit();
 }
