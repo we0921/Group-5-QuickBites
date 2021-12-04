@@ -1,34 +1,56 @@
+@font-face {
+	font-family: NimbusSans;
+	src: url(Nimbus-Sans.ttf);
+}
 #body {
 	margin: 0px;
 	padding: 0px;
 }
 #banner {
 	background-color: #007BFF;
-	height: 9vh;
+	height: 50px;
 	width: 100%;
 	margin: 0px;
+	display: block;
+	/*justify-content: space-between;*/
 }
-#logo {
-	/*background-color: #FFFF99;*/
-	height: 100%;
-	width: 20%;
-	font-size: 40px;
+#QuickBitesLogo {
+	height: 40px;
 	float: left;
-	margin: 0px;
+	margin: 5px;
 }
 #bannerButtonContainer {
-	/*background-color: #C4A484;*/
+	padding-left:5vh;
 	height: 100%;
 	width: 20%;
 	display: inline-block;
+	justify-content: flex-begin;
 }
 #userButtonContainer {
-	/*background-color: #C4A484;*/
-	height: 100%;
-	width: 20%;
+	height: 50px;
+	gap: 10px;
+	width: 100px;
 	float: right;
-	display: inline-block;
+	display: flex;
+	justify-content: flex-end;
 }
+
+#menuButton {
+	background-color: #ffdf00;
+	border: none;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	color: black;
+	padding: 5px 10px;
+	text-align: center;
+	float: left;
+	display: inline-block;
+	font-size: 12px;
+	margin-top: 5%;
+}
+
 #shopButton {
 	background-color: #ffdf00;
 	border: none;
@@ -36,16 +58,16 @@
 	border-top-right-radius: 3px;
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
-	color: white;
+	color: black;
 	padding: 5px 10px;
 	text-align: center;
-	color: black;
 	float: left;
 	display: inline-block;
 	font-size: 12px;
 	margin-top: 5%;
 }
-#shopButton:active {background-color: #c2a900}
+#shopButton:hover {background-color: #c2a900}
+
 #adminButton {
 	background-color: #90EE90;
 	border: none;
@@ -63,56 +85,83 @@
 	margin-left: 2%;
 	margin-top: 5%;
 }
-#adminButton:active {background-color: #6bb06b}
+#adminButton:hover {background-color: #6bb06b}
 
 #shoppingCartIcon {
-	background-color: #FF00FF;
-	max-height: 100%;
-	max-width: 20%;
+	min-width: 50px;
+	min-height: 50px;
 	float: right;
-	display: inline-block;
-	object-fit: cover;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:5px;
+	object-fit: contain;
+	order: 1;
 }
+#shoppingCartIcon:hover {
+	background-color: #3b99ff;
+}
+
 #shoppingCart {
 	max-width: 100%;
 	max-height: 100%;
 }
-#userAccountIcon {
-	background-color: #FFC0CB;
+
+#userAccount {
 	max-width: 100%;
-	max-height:100%;
-	float: right;
-	display: inline-block;
+	max-height: 100%;
+}
+
+#userAccountIcon {
+	min-width: 50px;
+	min-height: 50px;
+	padding: 5px;
+	object-fit: contain;
+	float: left;
+	order: 0;	
+}
+#userAccountIcon:hover {
+	background-color: #3b99ff;
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+	position: relative;
+	display: inline-block;
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
+	font-family: NimbusSans;
+	display: none;
+	position: absolute;
 	right:0;
-  background-color: #f9f9f9;
-  min-width: 350%;
+	background-color: #f9f9f9;
+	min-width: 350%;
 	min-height: 300px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
-  z-index: 1;
-	opacity: .5;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-	background-color: #ffffe0;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	padding: 12px 16px;
+	z-index: 1;
+	opacity: .9;
 }
 
 .itemListContainer {
-	height: 10%;
-	width: 100%;
-	display: inline-block;
+	font-family: NimbusSans;
+	opacity: .9;
 }
+.itemListContainer td, .dropdown-content th {
+	padding: 8px;
+}
+
+.itemListContainer tr:nth-child(even){background-color: #e6e6e6;}
+.itemListContainer th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 .qpContainer {
 	display: inline-block;
 	height: 100%;
@@ -121,51 +170,41 @@
 	margin-right: 20%;
 }
 .itemListName {
-		/*background-color: #FFD580;*/
-		height: 100%;
-		width: 40%;
 		float: left;
 		display: inline-block;
 		text-align: left;
 }
 .itemListQuantity {
-		/*background-color: #FFD580;*/
-		height: 100%;
-		width: 30%;
 		margin-left: 5%;
-		display: inline-block;
 }
 .itemListPrice {
-		/*background-color: #FFD580;*/
-		height: 100%;
-		width: 10%;
-		float: right;
+		float: left;
 		display: inline-block;
 }
 #backgroundStockImage {
-	background-color: #D3D3D3;
-	height: 40%;
+	background-image: url("https://res.cloudinary.com/grubhub-marketing/image/upload/f_auto,fl_lossy/v1621280438/HERMES/2021/DINER/SOC/SOC-202104005-GHGuaranteeMVP/GH%20New%20Hero%20Image%20Headers/GH_Headers_Desktop_copy.jpg");
+	background-size: cover;
+	height: 200px;
 	width: 100%;
 	position: relative;
+	display: flex;
+	justify-content: center;
 }
 #searchContainer {
-	/*background-color: #ffcccb;*/
-	height: 20%;
-	width: 40%;
-	margin-left: 30%;
-	margin-top: 7%;
-	padding-bottom: 3%;
+	width: 25vw;
 	align-items: center;
+	display: flex;
+	justify-content: center;
 }
 #searchBar {
-	padding-left: 10%;
-	padding-top: 5%;
-	float: left;
-	display: inline-block;
+	display: flex;
+	align-self: center;
+	align-content: center;
 }
 #searchButtonContainer {
-	padding-top: 5%;
-	display: inline-block;
+	display: flex;
+	align-content: center;
+	justify-content: center;
 }
 #searchButton {
 	background-color: #90EE90;
@@ -183,9 +222,10 @@
 }
 #searchButton:active {background-color: #6bb06b}
 #searchStyle {
-	width: 300px;
+	width: 25vw;
 }
 #searchResults {
+	font-family: NimbusSans;
 	/*background-color: #fed8b1;*/
 	width: 100%;
 	height: 10vh;
