@@ -1,0 +1,91 @@
+
+#shopButton {
+  background-color: #ffdf00;
+  border: none;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  color: black;
+  float: left;
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 5%;
+}
+
+#shopButton:active {
+  background-color: #c2a900
+}
+
+#banner {
+  background-color: #007BFF;
+  height: 9vh;
+  width: 100%;
+  margin: 0px;
+}
+
+#logo {
+  /*background-color: #FFFF99;*/
+  height: 100%;
+  width: 20%;
+  font-size: 40px;
+  float: left;
+  margin: 0px;
+}
+
+#bannerButtonContainer {
+  /*background-color: #C4A484;*/
+  height: 100%;
+  width: 20%;
+  display: inline-block;
+}
+
+#backgroundStockImage {
+  background-color: #808080;
+  height: 25vh;
+  width: 100%;
+}
+.registerForm{
+  margin-bottom: 20px;
+}
+body {
+  background-image: url("https://image.cnbcfm.com/api/v1/image/106182386-1571150620355dining.jpg?v=1571150655&w=1600&h=900");
+  background-size: cover;
+
+}
+label{
+  color: white;
+}
+h3{
+  color: white;
+}
+
+.login_register_container{
+
+}
+
+.login_register_form_box {
+  background-color: hsla(152, 73%, 84%, 0.5);
+}
+.corpoBox{
+  margin-right: 160px;
+}
+/* .userForm {
+padding-left: 10px;
+} */
+
+.corpSpeak1 {
+  padding-left: 100px;
+  padding-top: 100px;
+  padding-bottom: 30px;
+  color: white;
+  font-size: 75px;
+}
+.corpSpeak2 {
+  padding-left: 100px;
+  color: white;
+  font-size: 75px;
+}
