@@ -77,25 +77,32 @@ function displayShoppingCart() {
 }
 function addItemToShoppingCart(item, quantity, price) {
   removeCheckoutButton();
-  //creating itemList container
+  //creating itemList table
   let menu = document.getElementById("shoppingCartIcon");
   menu = menu.children[1];
-  menu.appendChild(document.createElement("div"));
+  menu.appendChild(document.createElement("table"));
   menu.lastChild.className = "itemListContainer";
 
-  //creating quantity container
+  //creating a new row
+  menu = document.getElementById("shoppingCartTable");
+  menu.appendChild(document.createElement("tr"));
+
   menu = menu.lastChild;
-  menu.appendChild(document.createElement("div"));
+  menu.appendChild(document.createElement("td"))
   menu.lastChild.className = "itemListName";
   menu.lastChild.innerHTML = item;
 
   //creating quantity container
-  menu.appendChild(document.createElement("div"));
+  menu = document.getElementById("shoppingCartTable");
+  menu = menu.lastChild;
+  menu.appendChild(document.createElement("td"));
   menu.lastChild.className = "itemListQuantity";
   menu.lastChild.innerHTML = quantity;
 
   //creating price container
-  menu.appendChild(document.createElement("div"));
+  menu = document.getElementById("shoppingCartTable");
+  menu = menu.lastChild;
+  menu.appendChild(document.createElement("td"));
   menu.lastChild.className = "itemListPrice";
   menu.lastChild.innerHTML = "$" + price;
 
@@ -131,5 +138,6 @@ function buildVendorCard(name, image) {
   advertise.lastChild.innerHTML = name;
 
   advertise.appendChild(document.createElement("button"));
-  advertise.lastChild.innerHTML = "menu";
+  advertise.lastChild.className = "btn btn-outline-primary";
+  advertise.lastChild.innerHTML = "See Menu";
 }
