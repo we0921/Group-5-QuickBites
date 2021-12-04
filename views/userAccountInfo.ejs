@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
   <link href = "css/userAccountInfo.css" rel = "stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+
 </head>
 <body id = "body">
 	<div id = "banner">
@@ -66,23 +68,23 @@
       </td>
     </tr>
   </table>
-  <form id = "post1" action = "/" method = "post">
+  <form id = "post1" style="display: none;" action = "/" method = "post">
     <input type = "text" name = "email">
     <input type = "text" name = "name">
     <input type = "text" name = "password">
     <input type = "text" name = "address">
   </form>
 
-  //feedback from server
+  <!-- //feedback from server -->
   <h1 style = "display:none" id = "ue"> <%=data%> </h1>
 
-  //javascript for page functionality
+  <!-- //javascript for page functionality -->
 	<script src="scriptsource/userAccountInfo.js"> </script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       let account = JSON.parse(document.getElementById("ue").innerHTML);
 
-      let name = account.p.first + account.p.last;
+      let name = account.p.first
       let email = account.p.email;
       let password = account.p.password;
       let address = account.p.address;
