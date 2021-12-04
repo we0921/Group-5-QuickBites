@@ -10,6 +10,9 @@
 		<div id = "bannerButtonContainer">
 			<button id = "shopButton"> Looking to Shop? </button>
 			<button id = "adminButton"> Admin Access </button>
+      <a href="/userAccountInfo" class="">
+        <button type="submit"class="btn btn-danger" name="button">user account</button>
+      </a>
 		</div>
     <div id = "userButtonContainer">
       <div id = "shoppingCartIcon" hover class = "dropdown">
@@ -53,6 +56,9 @@
     </div>
   </div>
   <div style = "display:none" id = "serverData"> <%=menuAndOrder%> </div>
+  <form id="post1" style="display: none;" action="/userHome" method="post">
+    <input type = "text" name = "email" >
+  </form>
   <script src="scriptsource/userHomePage.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -63,15 +69,24 @@
         menuAndOrder.menu.forEach(function (menu) {
           //checking if 4 vendor caards are filled
           if (menuCounter < 4) {
-            buildVendorCard(menu.vendorName, menu.sections[0].items[menuCounter].image);
+            console.log(menu.vendorEmail);
+            buildVendorCard(menu.vendorName, menu.sections[0].items[menuCounter].image, menu.vendorEmail);
             menuCounter++;
           }
         });
-        let vName = menuAndOrder.order.vendorName;
-        //iterating through order Object
-        menuAndOrder.order.items.forEach(function (menuItems) {
-          addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
-        });
+
+        if (menuAndOrder.order.length == 0){}
+        else {
+          // let vName = menuAndOrder.order.vendorName;
+          console.log(menuAndOrder.order[0].items);
+
+          //iterating through order Object
+          menuAndOrder.order[0].items.forEach(function (menuItems) {
+            console.log(menuItems);
+            addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
+          });
+        }
+
     });
   </script>
 </body>
