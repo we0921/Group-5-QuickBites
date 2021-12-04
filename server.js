@@ -2,6 +2,9 @@
 const mongoose = require('mongoose');
 const ejsLint = require('ejs-lint');
 
+
+
+
 // connect to or create the quickbites database
 mongoose.connect("mongodb://localhost:27017/quickbitesDB", {
   useNewUrlParser: true
@@ -35,7 +38,8 @@ const sectionSchema = new mongoose.Schema({
 const menuSchema = new mongoose.Schema({
   vendorName: String,
   vendorEmail: String,
-  sections: [sectionSchema]
+  sections: [sectionSchema],
+  approved: Boolean
 });
 
 const orderSchema = new mongoose.Schema({
@@ -81,67 +85,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public/"));
 const ejs = require("ejs");
-let temp = ejsLint('<!DOCTYPE html>\n'+
-'<html lang="en" dir="ltr">\n'+
-'  <head>\n'+
-'    <meta charset="utf-8">\n'+
-'    <title></title>\n'+
-'  </head>\n'+
-'  <body>\n'+
-'      <%-include("partials/vendorLoginHeader")-%>\n'+
-'      <div id = "backgroundStockImage">\n'+
-'        stock image goes here\n'+
-'      </div>\n'+
-'\n'+
-'      <h1 class="display-1"><%=metrics.menu.vendorName + " Metrics Page"%></h1>\n'+
-'      <%console.log(metrics);%>\n'+
-'      <!-- this table will display the number of times each individual item was ordered -->\n'+
-'      <%const h = new HashTable();  %>\n'+
-'      <%# for each section %>\n'+
-'      <% metrics.menu.section.forEach(function(section){ %>\n'+
-'        <%# for each item in every section  %>\n'+
-'          <%section.items.forEach(function(item){ %>\n'+
-'            <%# add all items to the map %>\n'+
-'            <%h.set(item.name, null)%>\n'+
-'          <%});%>\n'+
-'      <%});%>\n'+
-'\n'+
-'      <%# for each order belonging to the vendor %>\n'+
-'      <% metrics.orders.forEach(function(order){ %>\n'+
-'        <%# for each item within each order %>\n'+
-'          <% order.items.forEach(function(item){ %>\n'+
-'            <%#add the quantity ordered to our map%>\n'+
-'            <% h.set(item.name, h.get(item.name) + item.quantity) %>\n'+
-'          <%});%>\n'+
-'      <%});%>\n'+
-'\n'+
-'      <table class="table">\n'+
-'        <thead>\n'+
-'          <tr>\n'+
-'            <th scope="col"># of times ordered</th>\n'+
-'            <th scope="col">Item Name</th>\n'+
-'            <th scope="col">Item Price</th>\n'+
-'            <th scope="col">Item Calories</th>\n'+
-'          </tr>\n'+
-'        </thead>\n'+
-'        <tbody>\n'+
-'          <%# for each section %>\n'+
-'          <% metrics.menu.section.forEach(function(section){ %>\n'+
-'            <%# for each item in every section  %>\n'+
-'              <%section.items.forEach(function(item){ %>\n'+
-'                <tr>\n'+
-'                  <th scope="row"><%=h.get(item.name)%></th>\n'+
-'                  <td><%=item.name%></td>\n'+
-'                  <td><%=item.price%></td>\n'+
-'                  <td><%=item.calories%></td>\n'+
-'                </tr>\n'+
-'              <%});%>\n'+
-'          <%});%>\n'+
-'        </tbody>\n'+
-'      </table>\n'+
-'  </body>\n'+
-'</html>');
-console.log(temp);
+// let temp = ejsLint();
+// console.log(temp);
 
 
 // user login/register page
@@ -200,30 +145,23 @@ app.get("/vendorHome.js", function(req, res){
 
 
 
-// serve the vendor edit menu page
-app.get("/vendorEditMenu", function(req, res) {
-  Menu.find({email: emailKey}, function(err, menuItems){
-    if (err) console.log(err);
-    else {
-      let vendorMenu = menuItems[0].sections;
 
-      res.render("vendorEditMenu2", {menu: vendorMenu});
-    }
-  });
-});
+// app.get("/vendorEditMenu.js", function(req, res) {
+//   res.sendFile(__dirname + "/vendorEditMenu2.js");
+// });
+// app.get("/require.js", function(req, res) {
+//   res.sendFile(__dirname + "/require.js");
+// });
+// app.get("/userHomePage.js", function(req, res){
+//   res.sendFile(__dirname + "/public/scriptsource/userHomePage.js");
+// });
 
 // serve js files when needed
-app.get("/vendorEditMenu.js", function(req, res) {
-  res.sendFile(__dirname + "/vendorEditMenu2.js");
-});
-app.get("/require.js", function(req, res) {
-  res.sendFile(__dirname + "/require.js");
-});
-
+app.use(express.static(__dirname + "/public"));
 
 // serve the user home page
 app.get("/userHome", function(req, res){
-res.redirect("/menuPage/" + "61aa8ff80d52e7fbb488d870");
+
   // grab current order
   Order.find({userEmail: emailKey, status: false}, function(err, userOrder){
     if (err) console.log(err);
@@ -235,15 +173,33 @@ res.redirect("/menuPage/" + "61aa8ff80d52e7fbb488d870");
         else {
           const menuAndOrder = {
             menu: vendorMenus,
-            order: userOrder[0]
+            order: userOrder
           };
 
-          res.render("userHome", {menuAndOrder: menuAndOrder});
+
+          res.render("userHome", {menuAndOrder: JSON.stringify(menuAndOrder)});
         }
       });
     }
   });
 });
+
+app.post("/userHome", function(req, res){
+
+  let vendorEmail = req.body.email;
+  console.log("***********************");
+  console.log(req.body);
+  console.log("***********************");
+  Profile.findOne({email: vendorEmail}, function(err, vendor){
+    if (err) console.log(err);
+    else {
+      console.log(vendor.id);
+      res.redirect("/menuPage/" + vendor.id);
+    }
+  });
+
+});
+
 
 // serve the user account page
 app.get("/userAccountInfo", function(req, res) {
@@ -274,9 +230,16 @@ app.get("/userAccountInfo", function(req, res) {
         console.log(userProfile.o[0]);
         console.log(userProfile.o[1]);
 
-        res.render("userLogin");
+        res.render("userAccountInfo", {data: JSON.stringify(userProfile)});
       });
     });
+  });
+});
+
+app.post("/userAccountInfo", function(req, res){
+  Profile.findOneAndUpdate({email: emailKey}, {$set:{first: req.body.name, password: req.body.password, address: req.body.address}}, function(err, profile){
+    if (err) console.log(err);
+    else res.redirect("/userAccountInfo");
   });
 });
 
@@ -417,6 +380,87 @@ app.get("/vendorMetrics", function(req, res){
   });
 });
 
+// serve the vendor edit menu page
+app.get("/vendorEditMenu", function(req, res) {
+
+  Menu.find({vendorEmail: emailKey}, function(err, menuItems){
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(menuItems);
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    if (err) console.log(err);
+    else {
+      let vendorMenu = menuItems[0].sections;
+
+      res.render("vendorEditMenu", {menu: vendorMenu});
+    }
+  });
+});
+
+// save changes to the vendor edit menu
+app.post("/vendorEditMenu", function(req, res){
+console.log(JSON.parse(req.body.menu));
+
+
+  Profile.findOne({email: emailKey}, function(err, vendor){
+    let menuSections = [];
+    if (err) console.log(err);
+    else {
+      let vendorMenu = JSON.parse(req.body.menu);
+
+      vendorMenu.forEach(function(section){
+        let obj = {};
+        obj.title = section.title;
+        let itemArr = [];
+
+        section.items.forEach(function(item){
+          console.log("**********************");
+          console.log(item);
+            console.log("**********************");
+          let itemObj = {};
+
+          itemObj.name = item.Name;
+          itemObj.calories = parseInt(item.Calories);
+          itemObj.price = parseFloat(item.Price);
+          itemObj.image = "";
+          itemObj.availability = item.availability;
+          itemObj.quantity = 1;
+          itemArr.push(itemObj);
+        });
+        // console.log(itemObj);
+        obj.items = itemArr;
+        menuSections.push(obj);
+      });
+
+      Menu.remove({vendorEmail: emailKey}, function(err, thing){
+        if (err) console.log(err);
+        else {
+        console.log("**********************");
+        console.log(vendor);
+        console.log("**********************");
+        console.log(menuSections);
+        const menu = new Menu({
+        vendorName: vendor.restaurant,
+        vendorEmail: vendor.email,
+        sections: menuSections,
+        approved: vendor.approved
+        });
+        console.log(JSON.stringify(menu));
+        menu.save(function(err, thing){
+          if (err) console.log(err);
+          else {
+            console.log("savedDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+          }
+        });
+        res.redirect("/vendorEditMenu");
+        }
+      });
+
+
+    }
+
+  });
+
+});
 
 
 // admin home page
@@ -581,7 +625,7 @@ function login_register(req, res, type){
             email: req.body.registerEmail,
             password: req.body.registerPassword,
             restaurant: req.body.registerRestaurantName,
-            approved: 0,
+            approved: 1,
             address: ""
           });
           // insert record into profile table
@@ -638,7 +682,8 @@ function login_register(req, res, type){
                   quantity: 0
                 }]
               }
-            ]
+            ],
+            approved: true
           });
           //insert into database
           menu.save();
@@ -784,7 +829,7 @@ function login_register(req, res, type){
                 quantity: 3
               }
             ],
-            status: 1,
+            status: 0,
             image: "",
             specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
           });
