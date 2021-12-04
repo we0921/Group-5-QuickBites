@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+  <link href = "css/userHomePage.css" rel = "stylesheet"/>
+</head>
+<body id = "body">
+	<div id = "banner">
+			<h1 id = "logo">
+				QuickBites
+			</h1>
+		<div id = "bannerButtonContainer">
+			<button id = "shopButton"> Looking to Shop? </button>
+			<button id = "adminButton"> Admin Access </button>
+		</div>
+    <div id = "userButtonContainer">
+      <div id = "shoppingCartIcon" class = "dropdown">
+        <img id = "shoppingCart" src = "/pictures/shoppingcart.png" hover>
+        <div class="dropdown-content">
+          <h2>
+            Shopping Cart
+          </h2>
+          <div class = "itemListContainer">
+            <div class = "itemListName">
+              Name
+            </div>
+            <div class = "itemListQuantity">
+              Quantity
+            </div>
+            <div class = "itemListPrice">
+              Price
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id = "userAccountIcon">
+        user
+        <img src = "/pictures/userIcon.file">
+      </div>
+    </div>
+  </div>
+  <div id = "backgroundStockImage">
+    background stock image goes here
+    <div id = "searchContainer">
+      <div id = "searchBar">
+        <input id = "searchStyle" onkeyup="search()">
+      </div>
+      <div id = "searchButtonContainer">
+      </div>
+    </div>
+  </div>
+  <div id = "searchResults">
+    <div id = "restaurantResults">
+      <h3> Restaurant Results </h3>
+    </div>
+    <div id = "itemResults">
+      <h3> Food Results </h3>
+    </div>
+    <div id = "advertisementContainer">
+      </div>
+    </div>
+  </div>
+  <div style = "display:none" id = "serverData"> <%=menuAndOrder%> </div>
+  <script src="scriptsource/userHomePage.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      //Getting json object containing menu/order
+    let menuAndOrder = JSON.parse(document.getElementById("serverData").innerHTML);
+        let menuCounter = 0;
+        //iterating through menu object
+        menuAndOrder.menu.forEach(function (menu) {
+          //checking if 4 vendor caards are filled
+          if (menuCounter < 4) {
+            buildVendorCard(menu.vendorName, menu.sections[0].items[menuCounter].image);
+            menuCounter++;
+          }
+        });
+        let vName = menuAndOrder.order.vendorName;
+        //iterating through order Object
+        menuAndOrder.order.items.forEach(function (menuItems) {
+          addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
+        });
+    });
+  </script>
+</body>
