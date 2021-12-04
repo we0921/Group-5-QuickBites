@@ -13,23 +13,23 @@ function displayAccountInfo(email, name, password, address) {
 /********************************************************************************************/
 function editInfo() {
 	console.log("in editInfo");
-	/**************************************Email textfield***********************************/
-	//getting parent of node containing user's email
-	let p = document.getElementById("userEmail");
-
-	//getting user's Email
-	let text = document.getElementById("userEmail").textContent;
-
-	//creating input node
-	let newEmailNode = document.createElement("input");
-	newEmailNode.className = "accountInfoFormat";
-	newEmailNode.value = text.trim();
-
-	//removing all children and appending new node.
-	p.innerHTML = "";
-	p.appendChild(newEmailNode);
-
-	console.log(document.getElementById("userEmail").lastChild.value);
+	// /**************************************Email textfield***********************************/
+	// //getting parent of node containing user's email
+	// let p = document.getElementById("userEmail");
+  //
+	// //getting user's Email
+	// let text = document.getElementById("userEmail").textContent;
+  //
+	// //creating input node
+	// let newEmailNode = document.createElement("input");
+	// newEmailNode.className = "accountInfoFormat";
+	// newEmailNode.value = text.trim();
+  //
+	// //removing all children and appending new node.
+	// p.innerHTML = "";
+	// p.appendChild(newEmailNode);
+  //
+	// console.log(document.getElementById("userEmail").lastChild.value);
 
 	/***************************************Name textfield***********************************/
 	//getting parent of node containing user's name
@@ -96,19 +96,19 @@ function editInfo() {
 function saveChanges() {
 	/**************************************Email textfield***********************************/
     //getting parent of node containing user's email
-    let p = document.getElementById("userEmail");
-
-    //getting user's Email
-    let text = document.getElementById("userEmail").lastChild.value;
-
-    //creating input node
-    let newEmailNode = document.createElement("div");
-    newEmailNode.className = "accountInfoFormat";
-    newEmailNode.innerHTML = text.trim();
-
-    //removing all children and appending new node.
-    p.innerHTML = "";
-    p.appendChild(newEmailNode);
+    // let p = document.getElementById("userEmail");
+    //
+    // //getting user's Email
+    // let text = document.getElementById("userEmail").lastChild.value;
+    //
+    // //creating input node
+    // let newEmailNode = document.createElement("div");
+    // newEmailNode.className = "accountInfoFormat";
+    // newEmailNode.innerHTML = text.trim();
+    //
+    // //removing all children and appending new node.
+    // p.innerHTML = "";
+    // p.appendChild(newEmailNode);
 
 	/**************************************Name textfield***********************************/
     //getting parent of node containing user's email
@@ -165,11 +165,12 @@ function saveChanges() {
     document.getElementById("editButtonID").addEventListener("click", editInfo);
 
 		//submitting information to Server
-		document.getElementById("post1").children[0].value = document.getElementById("userEmail").value;
-		document.getElementById("post1").children[1].value = document.getElementById("userName").value;
-		document.getElementById("post1").children[2].value = document.getElementById("userPassword").value;
-		document.getElementById("post1").children[3].value = document.getElementById("userAddress").value;
-		console.log(document.getElementById("userEmail").lastchild.textContent);
+		document.getElementById("post1").children[0].value = document.getElementById("userEmail").children[0].innerHTML;
+		document.getElementById("post1").children[1].value = document.getElementById("userName").children[0].innerHTML;
+		document.getElementById("post1").children[2].value = document.getElementById("userPassword").children[0].innerHTML;
+		document.getElementById("post1").children[3].value = document.getElementById("userAddress").children[0].innerHTML;
+    console.log(document.getElementById("userEmail").children[0].innerHTML);
+
 		document.getElementById("post1").submit();
 }
 function buildSupportTicket(name, status, message) {
@@ -205,7 +206,7 @@ function buildSupportTicket(name, status, message) {
 		supportTicket.firstChild.firstChild.innerHTML = "Status: Active";
 		supportTicket.firstChild.style.backgroundColor = "#FFD580";
 		supportTicket.lastChild.style.backgroundColor = "#FFD580";
-		supportTicket.style.backgroundColor = "#FFD580"
+		supportTicket.style.backgroundColor = "#FFD580";
 	}
 	else {
 		supportTicket.firstChild.firstChild.innerHTML = "Status: Resolved";
@@ -260,7 +261,7 @@ function buildOrderCard2(restaurantName, dish1Name, dish1Amount, dish2Name, dish
 	//adding <div class = "totalText">
 	newCard.appendChild(document.createElement("div"));
 	newCard.lastChild.className = "totalText";
-	newCard.lastChild.innerHTML = "Total:"
+	newCard.lastChild.innerHTML = "Total:";
 
 	//adding <div class = "total">
 	newCard.appendChild(document.createElement("div"));
@@ -349,7 +350,7 @@ function buildOrderCard1(restaurantName, dish1Name, dish1Amount, total) {
 	//adding <div class = "totalText">
 	newCard.appendChild(document.createElement("div"));
 	newCard.lastChild.className = "totalText";
-	newCard.lastChild.innerHTML = "Total:"
+	newCard.lastChild.innerHTML = "Total:";
 
 	//adding <div class = "total">
 	newCard.appendChild(document.createElement("div"));
