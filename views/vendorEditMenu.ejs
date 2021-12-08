@@ -5,8 +5,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
     <meta charset="utf-8">
     <title>Vendor Edit Menu</title>
-  </head>
-  <body>
+
+    <%-include("partials/vendorBanner")-%>
+
     <div id = "backgroundStockImage">
       stock image goes here
     </div>
@@ -36,10 +37,10 @@
           <%}%>
           <!-- start of item card -->
           <div class="col-sm itemCard">
-            <div class="card mb-3" style="width: 30rem;">
+            <div class="card mb-3" style="width: 37rem;">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="" alt="Card image cap" class="card-img-top">
+                  <img src="<%=item.image%>" style="max-width: 100%; max-height: 100%;" alt="Card image cap" class="card-img-top">
                 </div>
                 <div class="col-md-8">
                   <ul class="list-group list-group-flush">
@@ -49,16 +50,19 @@
                   </ul>
                   <div class="row">
                     <div class="col-sm">
-                      <button type="button" class="btn btn-primary" name="button" onclick = "deleteitem1(this)">Delete Item</button>
+                      <button type="button" class="btn btn-sm btn-danger" name="button" onclick = "deleteitem1(this)">Delete Item</button>
                     </div>
                     <div class="col-sm">
-                      <button type="button" class="btn btn-primary" name="button" onclick = "editItem1(this)">Edit Item</button>
+                      <button type="button" class="btn btn-primary btn-sm" name="button" onclick = "editItem1(this)">Edit Item</button>
+                    </div>
+                    <div class="col-sm">
+                      <button type="button" class="btn btn-info btn-sm" name="button" onclick = "editImage(this)">Edit Image</button>
                     </div>
                     <div class="col-sm">
                       <%if (item.availability){%>
-                      <button type="button" class="btn btn-danger" name="button" onclick = "markUnavailable(this)">Mark Unavailable</button>
+                      <button type="button" class="btn btn-warning btn-sm" name="button" onclick = "markUnavailable(this)">Set<br>Unavailable</button>
                       <%} else {%>
-                      <button type="button" class="btn btn-success" name="button" onclick = "markUnavailable(this)">Mark Available</button>
+                      <button type="button" class="btn btn-success btn-sm" name="button" onclick = "markUnavailable(this)">Set<br>Available</button>
                       <%}%>
                     </div>
                   </div>
@@ -74,7 +78,7 @@
             <% counter++; %>
           <%});%>
           <% if (!rowClosed) { %>
-            <!-- </div> -->
+            </div>
           <%}%>
           </div>
 
@@ -96,6 +100,12 @@
     let priceInput;
 
     let sectionInput;
+    function editImage(button){
+      let card = button.parentNode.parentNode.parentNode.parentNode.firstElementChild.firstElementChild;
+      let newImage = prompt("Paste the image URL here: ");
+      card.src = newImage;
+      savePage();
+    }
     function savePage() {
       let menu = [];
       let sections = document.getElementsByClassName("sectionCard");
@@ -120,6 +130,7 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
@@ -170,6 +181,7 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
@@ -222,6 +234,7 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
@@ -370,6 +383,7 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
@@ -413,6 +427,8 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
+
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
@@ -473,6 +489,8 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
+
           if (item.Name == name && item.Calories == calories && item.Price == price) {
             item.availability = status;
           }
@@ -522,6 +540,8 @@
           item.Name = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[0].innerHTML;
           item.Calories = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[1].innerHTML;
           item.Price = itemsp[itemsCounter].children[0].children[0].children[1].children[0].children[2].innerHTML;
+          item.image = itemsp[itemsCounter].children[0].children[0].children[0].children[0].src;
+
 					if (itemsp[itemsCounter].children[0].children[0].children[1].children[1].children[2].children[0].innerHTML == "Mark Unavailable") {
 						item.availability = true;
 					}
