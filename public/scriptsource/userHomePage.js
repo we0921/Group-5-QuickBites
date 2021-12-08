@@ -130,7 +130,7 @@ function removeCheckoutButton() {
   menu = menu.children[menu.children.length - 1];
   menu.lastChild.remove();
 }
-function buildVendorCard(name, image, email) {
+function buildVendorCard(name, image) {
   let post = document.getElementById("post1");
   let advertise = document.getElementById("advertisementContainer");
   advertise.appendChild(document.createElement("div"));
@@ -146,9 +146,6 @@ function buildVendorCard(name, image, email) {
   advertise.appendChild(document.createElement("div"));
   advertise.lastChild.className = "restaurantName";
   advertise.lastChild.innerHTML = name;
-
-  advertise.appendChild(document.createElement("div"));
-  advertise.lastChild.innerHTML = email;
 
   advertise.appendChild(document.createElement("button"));
   advertise.lastChild.className = "btn btn-outline-primary";
