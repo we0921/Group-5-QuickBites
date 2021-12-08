@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/userMenu.css">
+    <meta charset="utf-8">
+    <title></title>
+    <%-include("partials/userHomeBanner")-%>
+    <div id = "backgroundStockImage">
+      stock image goes here
+    </div>
+    <!-- for each section -->
+    <div class="container-fluid">
+
+      <!-- vendor attributes -->
+      <h1 id="vendorName" style="display: block;"><%=menuAndOrder.menu.vendorName%></h1>
+      <h1 id="vendorEmail" style="display: none;"><%=menuAndOrder.menu.vendorEmail%></h1>
+
+    <% menuAndOrder.menu.sections.forEach(function(section){ %>
+      <div class="row justify-content-center">
+        <div class = "sectionHeader">
+          <div class = "sectionTitle">
+            <%=section.title%>
+          </div>
+          <div class = "sectionBar">. </div>
+        </div>
+        <%# for each item %>
+        <% let counter = 0; %>
+        <% let rowClosed; %>
+        <% section.items.forEach(function(item){ %>
+          <%# if we hit a third item, create a new row %>
+          <% if (counter % 2 == 0) { %>
+            <div class="row justify-content-center">
+              <% rowClosed = false;%>
+          <%}%>
+          <!-- start of item card -->
+          <div class="col-sm">
+            <div class="card mb-3" style="width: 41rem;">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="<%=item.image%>" alt="Card image cap" class="card-img-top">
+                </div>
+                <div class="col-md-8">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><%=item.name%></li>
+                    <li class="list-group-item"><%=item.calories%></li>
+                    <li class="list-group-item"><%=item.price%></li>
+                  </ul>
+                  <% if (item.availability){ %>
+                    <div class="row">
+                      <div class="col-sm">
+                        <button type="button" class="btn btn-primary" name="button" onclick="addItem(this)">Add Item</button>
+                      </div>
+                    </div>
+                  <%} else { %>
+                    <div class="row">
+                      <h1>Item Unavailable</h1>
+                    </div>
+                  <%}%>
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- end of item card -->
+            <% if (counter % 2 == 1) { %>
+              <% rowClosed = true; %>
+              </div>
+            <%}%>
+            <% counter++; %>
+          <%});%>
+          <% if (!rowClosed) { %>
+            <!-- </div> -->
+          <%}%>
+          </div>
+
+        <%});%>
+        </div>
+    </div>
+    <form id="addItemForm" style="display: none;" action="/userAddItem" method="post">
+      <input id="name" type="text" name="name" value="">
+      <input id="price" type="text" name="price" value="">
+      <input id="calories" type="text" name="calories" value="">
+      <input id="quantity" type="text" name="quantity" value="">
+      <input id="venName" type="text" name="venName" value="">
+      <input id="venEmail" type="text" name="venEmail" value="">
+      <input id="image" type="text" name="image" value="">
+    </form>
+    <form id="removeItem" style="display: none;" action="/userDeleteItem" method="post">
+     <input type = "text" name = "item" >
+     <input type = "text" name = "url" >
+   </form>
+    <h1 id="serverData" style="display: none;"><%=JSON.stringify(menuAndOrder)%></h1>
+    <script src="/scriptsource/userMenu.js"></script>
+    <script>
+
+    function addItem(button) {
+
+      //creating textfield for user to enter quantity into
+      let buttonContainer = button.parentNode;
+      buttonContainer.prepend(document.createElement("input"));
+
+      //editing button
+      button.innerHTML = "Save";
+      button.setAttribute("onclick", "save(this)");
+    }
+    function save(button) {
+      //node holding item's name
+      let itemQuantity = button.parentNode.firstElementChild.value;
+      let itemName = button.parentNode.parentNode.parentNode.children[0].children[0].innerHTML;
+      let itemImage = button.parentNode.parentNode.parentNode.parentNode.children[0].children[0].value;
+      let itemCalories = button.parentNode.parentNode.parentNode.children[0].children[1].innerHTML;
+      let itemPrice = button.parentNode.parentNode.parentNode.children[0].children[2].innerHTML;
+      let venName = document.getElementById("vendorName").innerHTML;
+      let venEmail = document.getElementById("vendorEmail").innerHTML;
+
+      //editing button
+      button.innerHTML = "Add Item";
+      button.setAttribute("onclick", "addItem(this)");
+
+      //removing textfield for user to enter quantity into
+      let buttonContainer = button.parentNode;
+      let buttonClone = button.cloneNode(button);
+      buttonContainer.innerHTML = "";
+      buttonContainer.appendChild(buttonClone);
+
+      // fill out invisible form
+      document.getElementById("name").value = itemName;
+      document.getElementById("quantity").value = itemQuantity;
+      document.getElementById("calories").value = itemCalories;
+      document.getElementById("price").value = itemPrice;
+      document.getElementById("venName").value = venName;
+      document.getElementById("venEmail").value = venEmail;
+      document.getElementById("image").value = itemImage;
+
+      document.getElementById("addItemForm").submit();
+    }
+    //Getting json object containing menu/order
+    let menuAndOrder = JSON.parse(document.getElementById("serverData").innerHTML);
+
+    // shopping cart
+    if (menuAndOrder.order.length == 0){}
+       else {
+         // let vName = menuAndOrder.order.vendorName;
+         console.log(menuAndOrder.order[0].items);
+         //iterating through order Object
+         menuAndOrder.order[0].items.forEach(function (menuItems) {
+           console.log(menuItems);
+           addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
+         });
+       }
+    </script>
+  </body>
+</html>
