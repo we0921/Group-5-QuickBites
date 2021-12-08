@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/userMenu.css">
     <meta charset="utf-8">
     <title></title>
-  </head>
-  <body>
-    <%-include("partials/userLoginHeader")-%>
+    <%-include("partials/userHomeBanner")-%>
     <div id = "backgroundStockImage">
       stock image goes here
     </div>
@@ -13,12 +13,17 @@
     <div class="container-fluid">
 
       <!-- vendor attributes -->
-      <h1 id="vendorName" style="display: none;"><%=menuAndOrder.menu.vendorName%></h1>
+      <h1 id="vendorName" style="display: block;"><%=menuAndOrder.menu.vendorName%></h1>
       <h1 id="vendorEmail" style="display: none;"><%=menuAndOrder.menu.vendorEmail%></h1>
 
     <% menuAndOrder.menu.sections.forEach(function(section){ %>
       <div class="row justify-content-center">
-        <h1><%=section.title%></h1>
+        <div class = "sectionHeader">
+          <div class = "sectionTitle">
+            <%=section.title%>
+          </div>
+          <div class = "sectionBar">. </div>
+        </div>
         <%# for each item %>
         <% let counter = 0; %>
         <% let rowClosed; %>
@@ -83,15 +88,34 @@
     <script>
 
     function addItem(button) {
-      //node holding item's name
-      let itemName = button.parentNode.parentNode.parentNode.children[0].children[0].innerHTML;
 
-      let itemQuantity = prompt("Please Enter Desired Item Quantity: ");
+      //creating textfield for user to enter quantity into
+      let buttonContainer = button.parentNode;
+      buttonContainer.prepend(document.createElement("input"));
+
+      //editing button
+      button.innerHTML = "Save";
+      button.setAttribute("onclick", "save(this)");
+    }
+    function save(button) {
+      //node holding item's name
+      let itemQuantity = button.parentNode.firstElementChild.value;
+      let itemName = button.parentNode.parentNode.parentNode.children[0].children[0].innerHTML;
       let itemImage = button.parentNode.parentNode.parentNode.parentNode.children[0].children[0].value;
       let itemCalories = button.parentNode.parentNode.parentNode.children[0].children[1].innerHTML;
       let itemPrice = button.parentNode.parentNode.parentNode.children[0].children[2].innerHTML;
       let venName = document.getElementById("vendorName").innerHTML;
       let venEmail = document.getElementById("vendorEmail").innerHTML;
+
+      //editing button
+      button.innerHTML = "Add Item";
+      button.setAttribute("onclick", "addItem(this)");
+
+      //removing textfield for user to enter quantity into
+      let buttonContainer = button.parentNode;
+      let buttonClone = button.cloneNode(button);
+      buttonContainer.innerHTML = "";
+      buttonContainer.appendChild(buttonClone);
 
       // fill out invisible form
       document.getElementById("name").value = itemName;
@@ -103,7 +127,6 @@
       document.getElementById("image").value = itemImage;
 
       document.getElementById("addItemForm").submit();
-
     }
     </script>
   </body>
