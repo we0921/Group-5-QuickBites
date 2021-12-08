@@ -1,0 +1,14 @@
+.ticketForm {
+  margin: auto;
+  width: 40%;
+}
+
+.fields {
+  margin-bottom: 40px;
+}
+
+.submitBtn {
+
+  display: flex;
+    justify-content: center;
+}
