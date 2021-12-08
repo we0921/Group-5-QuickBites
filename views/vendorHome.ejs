@@ -1,91 +1,218 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+//jshint esversion:6
 
-<head>
-  <meta charset="utf-8">
-  <title>Restaurant Home</title>
-  <link rel="stylesheet" href="css/vendorHome.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+/********************************************************************************************/
+/* buildOrderCard2 will build the order card and add it to the bottom of the order list      */
+/* when you call it.                                                                        */
+/*                                                                                          */
+/* @todo inserting photo of food has not been implemented                                   */
+/* @todo fix height sizing of rows in cards                                                 */
+/*                                                                                          */
+/* String userName  name of the user                                            */
+/* String dish1Name 	  name of the first dish from the order                             */
+/* int    dish1Amount     the amount of dish1 ordered                                       */
+/* String dish2Name       name of the second dish from the order                            */
+/* int    dish2Amount     the amount of dish2 ordered                                       */
+/* float  total           the total cost of the order                                       */
+/********************************************************************************************/
+function buildOrderCard2(userName, dish1Name, dish1Amount, dish2Name, dish2Amount, total, image) {
+	//getting node of order history list
+	let newCard = document.getElementById('orderHistoryContainer');
 
-</head>
+	//adding <div class = "orderCardContainer">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "orderCardContainer";
 
-<body>
-  <%-include("partials/vendorLoginHeader")-%>
-  <div class="container-fluid">
-    <div class="row justify-content-end">
-      <div class="col-4">
-        <a href="/vendorMetrics">
-          <button type="button" class="btn btn-danger vendorBtns" name="button">View Metrics</button>
-        </a>
-        <a href="/vendorEditMenu">
-          <button type="button" class="btn btn-primary vendorBtns" name="button">Edit Menu</button>
-        </a>
-        <a href="/vendorTicket">
-          <button type="button" class="btn btn-success vendorBtns" name="button">Submit a Ticket</button>
-        </a>
-      </div>
+	//adding <div class = "orderCardPhoto">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "orderCardPhoto";
 
-    </div>
-  </div>
-  <div class="container-fluid">
-    <div class="row justify-content-md-center">
-      <div class="col-6">
-        <div id="orderHistoryContainer">
-          <h2 id="orderHistoryHeader">
-            <div class="headerFormat"> Current/Past Order History </div>
-          </h2>
-        </div>
-      </div>
-      <div class="col-4">
-        <div id="supportTicketsContainer">
-          <h2 id="accountInfoHeader">
-            <div class="headerFormat"> Support Tickets </div>
-          </h2>
-        </div>
-      </div>
-    </div>
-  </div>
+	//adding image
+	console.log(image);
+	console.log(newCard);
+	// newCard = newCard.lastElementChild;
+	newCard.appendChild(document.createElement("img"));
+	newCard.children[0].src = image;
+	// newCard = newCard.parentNode;
+	newCard.children[0].style.maxHeight = "100%";
 
+	//adding <div class = "cardInfoContainer">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardInfoContainer";
 
+	//adding <div class = "carduserName">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "carduserName";
+	newCard.innerHTML = userName;
 
-  <!-- // feedback from Server -->
-  <h1 style="display:none" id="ue"> <%=home%> </h1>
+	//adding FIRST <div class = "cardRow">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardRow";
 
-  <!-- //javascript for page functionality -->
-  <script src="vendorHome.js"> </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      let account = JSON.parse(document.getElementById("ue").innerHTML);
-      console.log(account);
-      console.log("HERE");
+	//adding <div class = "totalText">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "totalText";
+	newCard.lastChild.innerHTML = "Total:";
 
-      //Displaying vendor's order history
-      account.o.forEach(function(order) {
-        let name = order.userName;
-        let image = order.image;
-        let dish1, dish2, dish1Amount, dish2Amount, dish1price, dish2price;
-        let counter = 0;
-        let total = 0;
-        order.items.forEach(function(item) {
-          total += item.price * item.quantity;
-          if (counter == 0) {
-            dish1 = item.name;
-            dish1Amount = item.quantity;
-            dish1price = item.price;
-          } else if (counter == 1) {
-            dish2 = item.name;
-            dish2Amount = item.quantity;
-            dish2price = item.price;
-          }
-          counter++;
-        });
-        if (dish2 != null) buildOrderCard2(name, dish1, dish1Amount, dish2, dish2Amount, total.toFixed(2), image);
-        else buildOrderCard1(name, dish1, dish1Amount, total.toFixed(2), image);
-      });
-      //displaying all of user's tickets
-      account.t.forEach(function(ticket) {
-        buildSupportTicket(ticket.receiverName, ticket.status, ticket.body);
-      });
-    });
-  </script>
-</body>
+	//adding <div class = "total">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "total";
+	newCard.lastChild.innerHTML = "$" + total;
+
+	//adding SECOND <div class = "cardRow">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardRow";
+
+	//adding <div class = "dishAmount">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishAmount";
+	newCard.lastChild.innerHTML = dish1Amount;
+
+	//adding <div class = "dishName">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishName";
+	newCard.lastChild.innerHTML = dish1Name;
+
+	//adding Third <div class = "cardRow">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardRow";
+
+	//adding <div class = "dishAmount">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishAmount";
+	newCard.lastChild.innerHTML = dish2Amount;
+
+	//adding <div class = "dishName">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishName";
+	newCard.lastChild.innerHTML = dish2Name;
+}
+
+/********************************************************************************************/
+/* buildOrderCard2 will build the order card and add it to the bottom of the order list      */
+/* when you call it.                                                                        */
+/*                                                                                          */
+/* @todo inserting photo of food has not been implemented                                   */
+/* @todo fix height sizing of rows in cards                                                 */
+/*                                                                                          */
+/* String userName  name of the user                                           */
+/* String dish1Name 	  name of the first dish from the order                             */
+/* int    dish1Amount     the amount of dish1 ordered                                       */
+/* String dish2Name       name of the second dish from the order                            */
+/* int    dish2Amount     the amount of dish2 ordered                                       */
+/* float  total           the total cost of the order                                       */
+/********************************************************************************************/
+function buildOrderCard1(userName, dish1Name, dish1Amount, total, image) {
+	//getting node of order history list
+	let newCard = document.getElementById('orderHistoryContainer');
+
+	//adding <div class = "orderCardContainer">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "orderCardContainer";
+
+	//adding <div class = "orderCardPhoto">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "orderCardPhoto";
+
+	//adding image
+	// newCard = newCard.lastElementChild;
+	newCard.appendChild(document.createElement("img"));
+	newCard.children[0].src = image;
+	// newCard = newCard.parentNode;
+
+	//adding <div class = "cardInfoContainer">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardInfoContainer";
+
+	//adding <div class = "carduserName">
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "carduserName";
+	newCard.innerHTML = userName;
+
+	//adding FIRST <div class = "cardRow">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardRow";
+
+	//adding <div class = "totalText">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "totalText";
+	newCard.lastChild.innerHTML = "Total:";
+
+	//adding <div class = "total">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "total";
+	newCard.lastChild.innerHTML = "$" + total;
+
+	//adding SECOND <div class = "cardRow">
+	newCard = newCard.parentNode;
+	newCard.appendChild(document.createElement("div"));
+	newCard = newCard.lastChild;
+	newCard.className = "cardRow";
+
+	//adding <div class = "dishAmount">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishAmount";
+	newCard.lastChild.innerHTML = dish1Amount;
+
+	//adding <div class = "dishName">
+	newCard.appendChild(document.createElement("div"));
+	newCard.lastChild.className = "dishName";
+	newCard.lastChild.innerHTML = dish1Name;
+}
+
+function buildSupportTicket(name, status, message) {
+	//creating input node
+    let supportTicket = document.getElementById("supportTicketsContainer");
+
+	//adding <div class = "cardSupportTicket">
+	supportTicket.appendChild(document.createElement("div"));
+	supportTicket = supportTicket.lastChild;
+	supportTicket.className = "cardSupportTicket";
+
+	//adding <div class = "cardSupportTicketHead">
+	supportTicket.appendChild(document.createElement("div"));
+	supportTicket = supportTicket.lastChild;
+	supportTicket.className = "cardSupportTicketHead";
+
+	//adding <div class = "status">
+	supportTicket.appendChild(document.createElement("div"));
+	supportTicket.lastChild.className = "status";
+
+	//adding <div class = "user">
+	supportTicket.appendChild(document.createElement("div"));
+	supportTicket.lastChild.className = "user";
+	supportTicket.lastChild.innerHTML = "User:" + name;
+
+	//adding <div class = "cardSupportTicketBody">
+	supportTicket = supportTicket.parentNode;
+	supportTicket.appendChild(document.createElement("div"));
+	supportTicket.lastChild.className = "cardSupportTicketBody";
+	supportTicket.lastChild.innerHTML = message;
+
+	if (status) {
+		supportTicket.firstChild.firstChild.innerHTML = "Status: Active";
+		supportTicket.firstChild.style.backgroundColor = "#FFD580";
+		supportTicket.lastChild.style.backgroundColor = "#FFD580";
+		supportTicket.style.backgroundColor = "#FFD580";
+	}
+	else {
+		supportTicket.firstChild.firstChild.innerHTML = "Status: Resolved";
+	}
+}
