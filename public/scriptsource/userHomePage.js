@@ -29,13 +29,10 @@ function displayRestaurant(menu) {
   list.lastChild.className = "resultsContainer";
   list.lastChild.innerHTML = menu.vendorName;
   var att = document.createAttribute("onclick");
-
   att.value = "submitItem("+ "'" + menu.vendorEmail +"'" + ");";
   list.lastChild.setAttributeNode(att);
-  // list.lastChild.onclick = "submitItem(this)";
 }
 function submitItem(email){
-  console.log("AYYA BOIH");
   document.getElementById("post1").children[0].value = email;
   console.log(document.getElementById("post1").children[0].value);
   document.getElementById("post1").submit();
@@ -52,15 +49,6 @@ function clearResults() {
   }
   restaurantList.appendChild(document.createElement("h3"));
   restaurantList.lastChild.innerHTML = "Restaurant Results";
-
-  let itemList = document.getElementById("itemResults");
-  result = itemList.lastChild;
-  while (result) {
-      itemList.removeChild(result);
-      result = itemList.lastChild;
-  }
-  itemList.appendChild(document.createElement("h3"));
-  itemList.lastChild.innerHTML = "Item Results";
 }
 function displayShoppingCart() {
   //@TODO implement list of shopping cart using addItemToShoppingCart functionality
@@ -79,10 +67,16 @@ function addItemToShoppingCart(item, quantity, price) {
   menu = document.getElementById("shoppingCartTable");
   menu.appendChild(document.createElement("tr"));
 
+  //creating name container
   menu = menu.lastChild;
   menu.appendChild(document.createElement("td"))
   menu.lastChild.className = "itemListName";
   menu.lastChild.innerHTML = item;
+
+  //adding button to name container
+  var att = document.createAttribute("onclick");
+  att.value = "removeItem(this)";
+  menu.lastChild.setAttributeNode(att);
 
   //creating quantity container
   menu = document.getElementById("shoppingCartTable");
@@ -99,6 +93,29 @@ function addItemToShoppingCart(item, quantity, price) {
   menu.lastChild.innerHTML = "$" + price;
 
   addCheckoutButton();
+}
+function removeItem(nameNode) {
+  //getting all information related to item in shopping cart and putting
+  //it in an object
+  let itemInfo = {};
+  itemInfo.name = nameNode.innerHTML;
+  itemInfo.quantity = nameNode.parentNode.children[1].textContent;
+  itemInfo.price = nameNode.parentNode.children[2].textContent;
+
+  let fullUrl = document.URL.split("/");
+  let url = "";
+  for (let i = 3; i < fullUrl.length; i++) {
+    url += fullUrl[i];
+  }
+
+  submitRemoval(itemInfo, url);
+}
+
+function submitRemoval(item, url) {
+  document.getElementById("post1").children[0].value = JSON.stringify(item);
+  document.getElementById("removeItem").children[1].value = url;
+  //document.getElementById("removeItem").submit();
+  console.log("item removed!");
 }
 function addCheckoutButton() {
   let menu = document.getElementById("shoppingCartIcon");
@@ -132,25 +149,13 @@ function buildVendorCard(name, image, email) {
 
   advertise.appendChild(document.createElement("div"));
   advertise.lastChild.innerHTML = email;
+
   advertise.appendChild(document.createElement("button"));
   advertise.lastChild.className = "btn btn-outline-primary";
   advertise.lastChild.innerHTML = "See Menu";
-
-  // advertise.appendChild(document.createElement("a"));
-  // advertise.lastChild.className = "btn btn-primary";
-  //    advertise.lastChild.href = "/" + email;
-
   advertise.lastChild.setAttribute("onclick", "submitForm(this)");
-
-  // console.log(post.children[0].value);
-  // advertise.lastChild.addEventListener("click", submitForm(this));
 }
 function submitForm(button){
-  console.log("******************************");
-  console.log(button.previousElementSibling.innerHTML);
-    console.log("******************************");
-
   document.getElementById("post1").children[0].value = button.previousElementSibling.innerHTML.trim();
-  console.log(document.getElementById("post1").children[0].value);
   document.getElementById("post1").submit();
 }
