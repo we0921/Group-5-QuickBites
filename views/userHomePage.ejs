@@ -48,14 +48,15 @@
     <div id = "restaurantResults">
       <h3> Restaurant Results </h3>
     </div>
-    <div id = "itemResults">
-      <h3> Food Results </h3>
-    </div>
     <div id = "advertisementContainer">
       </div>
     </div>
   </div>
   <div style = "display:none" id = "serverData"> <%=menuAndOrder%> </div>
+  <form id="removeItem" style="display: none;" action="/userHome" method="post">
+    <input type = "text" name = "item" >
+    <input type = "text" name = "url" >
+  </form>
   <form id="post1" style="display: none;" action="/userHome" method="post">
     <input type = "text" name = "email" >
   </form>
@@ -70,7 +71,7 @@
           //checking if 4 vendor caards are filled
           if (menuCounter < 4) {
             console.log(menu.vendorEmail);
-            buildVendorCard(menu.vendorName, menu.sections[0].items[menuCounter].image, menu.vendorEmail);
+            buildVendorCard(menu.vendorName, menu.sections[0].items[0].image, menu.vendorEmail);
             menuCounter++;
           }
         });
