@@ -31,6 +31,7 @@ function displayRestaurant(menu) {
   var att = document.createAttribute("onclick");
   att.value = "submitItem("+ "'" + menu.vendorEmail +"'" + ");";
   list.lastChild.setAttributeNode(att);
+  list.lastChild.style.cursor = "pointer";
 }
 function submitItem(email){
   document.getElementById("post1").children[0].value = email;
@@ -77,7 +78,7 @@ function addItemToShoppingCart(item, quantity, price) {
   var att = document.createAttribute("onclick");
   att.value = "removeItem(this)";
   menu.lastChild.setAttributeNode(att);
-
+    menu.lastChild.style.cursor = "pointer";
   //creating quantity container
   menu = document.getElementById("shoppingCartTable");
   menu = menu.lastChild;
@@ -112,7 +113,7 @@ function removeItem(nameNode) {
 }
 
 function submitRemoval(item, url) {
-  document.getElementById("post1").children[0].value = JSON.stringify(item);
+  document.getElementById("removeItem").children[0].value = JSON.stringify(item);
   document.getElementById("removeItem").children[1].value = url;
   //document.getElementById("removeItem").submit();
   console.log("item removed!");
