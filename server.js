@@ -88,10 +88,12 @@ const ejs = require("ejs");
 // let temp = ejsLint();
 // console.log(temp);
 
-
 // user login/register page
 app.get("/", function(request, response) {
-  response.render("userLogin");
+  let login_reg_status = {
+    status: "fine"
+  };
+  response.render("userLogin", {status: JSON.stringify(login_reg_status)});
 });
 
 app.post("/", function(req, res){
@@ -100,7 +102,7 @@ app.post("/", function(req, res){
 
 // vendor login/register page
 app.get("/vendorLogin", function(request, response) {
-  response.render("vendorLogin");
+  response.render("vendorLogin", {status: "fine"});
 });
 
 app.post("/vendorLogin", function(req, res) {
@@ -279,7 +281,7 @@ app.post("/userAddItem", function(req, res){
             }
           ],
           status: 0,
-          image: "",
+          image: itemImage,
           specialRequest: ""
         });
         order.save();
@@ -421,7 +423,7 @@ console.log(JSON.parse(req.body.menu));
           itemObj.name = item.Name;
           itemObj.calories = parseInt(item.Calories);
           itemObj.price = parseFloat(item.Price);
-          itemObj.image = "";
+          itemObj.image = item.image;
           itemObj.availability = item.availability;
           itemObj.quantity = 1;
           itemArr.push(itemObj);
@@ -578,6 +580,9 @@ function login_register(req, res, type){
 
     // does this person already exist?
     Profile.find({email: loginEmail, password: loginPassword},function(err, profiles){
+      let login_reg_status = {
+        status: "login-fail"
+      };
       if (err) console.log(err);
 
       // person exists
@@ -589,15 +594,15 @@ function login_register(req, res, type){
         else if (type === "user" && profiles[0].type === "user") res.redirect("/userHome");
         else if (type === "admin" && profiles[0].type === "admin") res.redirect("/adminHome");
         else {
-          if (type === "vendor") res.render("vendorLogin");
-          else if (type === "user") res.render("userLogin");
+          if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
+          else if (type === "user") res.render("userLogin", {status: JSON.stringify(login_reg_status)});
           else res.render("adminLogin");
         }
       }
       // otherwise this person doesnt exist and we can send them back to the login
       else{
-        if (type === "vendor") res.render("vendorLogin");
-        else res.render("userLogin");
+        if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
+        else res.render("userLogin", {status: JSON.stringify(login_reg_status)});
       }
     });
   }
@@ -610,8 +615,11 @@ function login_register(req, res, type){
 
       // if they do, send them back to the login screen
       else if (profiles.length != 0){
-        if (type === "vendor") res.render("vendorLogin");
-        else res.render("userLogin");
+        let login_reg_status = {
+          status: "register-fail"
+        };
+        if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
+        else res.render("userLogin", {status: JSON.stringify(login_reg_status)});
       }
       // otherwise let them register
       else {
@@ -721,7 +729,7 @@ function login_register(req, res, type){
               }
             ],
             status: 1,
-            image: "",
+            image: "https://media.istockphoto.com/vectors/ice-cream-cone-with-chocolate-and-decor-vector-illustration-clipart-vector-id948444318",
             specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
           });
           const order2 = new Order({
@@ -748,7 +756,7 @@ function login_register(req, res, type){
               }
             ],
             status: 1,
-            image: "",
+            image: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=980:*",
             specialRequest: "Please give me EXACTLY ONE FRY!!!"
           });
           order.save();
@@ -777,9 +785,11 @@ function login_register(req, res, type){
           });
           ticket.save();
           ticket2.save();
+          let login_reg_status = {
+            status: "register-success"
+          };
 
-
-          res.render("vendorLogin");
+          res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
         }
         // otherwise a user is trying to register
         else {
@@ -878,8 +888,10 @@ function login_register(req, res, type){
           });
           ticket.save();
           ticket2.save();
-
-          res.render("userLogin");
+          let login_reg_status = {
+            status: "register-success"
+          };
+          res.render("userLogin", {status: JSON.stringify(login_reg_status)});
         }
       }
     });
