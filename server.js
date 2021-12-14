@@ -755,61 +755,61 @@ function login_register(req, res, type){
           profile.save();
 
           //create a sample menu page
-          // const menu = new Menu({
-          //   vendorName: req.body.registerRestaurantName,
-          //   vendorEmail: req.body.registerEmail,
-          //   sections: [{
-          //       title: "Food",
-          //       items: [{
-          //           name: "Ogre Fries",
-          //           calories: 123,
-          //           price: 9.99,
-          //           image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
-          //           availability: 1,
-          //           quantity: 1
-          //         },
-          //         {
-          //           name: "Onion",
-          //           calories: 456,
-          //           price: 7.99,
-          //           image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
-          //           availability: 1,
-          //           quantity: 1
-          //         },
-          //         {
-          //           name: "Good Grubs",
-          //           calories: 789,
-          //           price: 4.99,
-          //           image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
-          //           availability: 1,
-          //           quantity: 1
-          //         },
-          //         {
-          //           name: "Mud Burger",
-          //           calories: 100,
-          //           price: 11.99,
-          //           image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-          //           availability: 0,
-          //           quantity: 1
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       title: "Drank",
-          //       items: [{
-          //         name: "Swamp Shake",
-          //         calories: 420,
-          //         price: 3.99,
-          //         image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-          //         availability: 0,
-          //         quantity: 0
-          //       }]
-          //     }
-          //   ],
-          //   approved: true
-          // });
-          // //insert into database
-          // menu.save();
+          const menu = new Menu({
+            vendorName: req.body.registerRestaurantName,
+            vendorEmail: req.body.registerEmail,
+            sections: [{
+                title: "Food",
+                items: [{
+                    name: "Ogre Fries",
+                    calories: 123,
+                    price: 9.99,
+                    image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Onion",
+                    calories: 456,
+                    price: 7.99,
+                    image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Good Grubs",
+                    calories: 789,
+                    price: 4.99,
+                    image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
+                    availability: 1,
+                    quantity: 1
+                  },
+                  {
+                    name: "Mud Burger",
+                    calories: 100,
+                    price: 11.99,
+                    image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+                    availability: 0,
+                    quantity: 1
+                  }
+                ]
+              },
+              {
+                title: "Drank",
+                items: [{
+                  name: "Swamp Shake",
+                  calories: 420,
+                  price: 3.99,
+                  image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+                  availability: 0,
+                  quantity: 0
+                }]
+              }
+            ],
+            approved: true
+          });
+          //insert into database
+          menu.save();
 
           // // create default orders and tickets
           // const order = new Order({
