@@ -30,7 +30,9 @@ Password: p
 Further accounts can be created using the registration fields on the respective login page. Account information (with the exception of email address) can be changed in the account details page on the site.
 
 # Known Issues:
-[TBD]
+
+* Concurrent user/vendor access causes synchronization issues. Doing so will cause issues that will require our manual intervention.
+* Do not have multiple tabs of the site open (ex: the user home page and a restaurant menu)
 
 # Contact Info:
 If, for any reason, there is an interruption in the hosting service, we should be able to manually restart the web server. 
