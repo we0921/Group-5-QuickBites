@@ -14,7 +14,6 @@ Accessing the Admin Home Page:
 Login for User Account(s):
 
 Email: john@gmail.com
-
 Password: p
 
 Login for Vendor Account(s):
