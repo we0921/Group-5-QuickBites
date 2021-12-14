@@ -36,6 +36,7 @@ Further accounts can be created using the registration fields on the respective 
 * ALWAYS LOG IN, if attempting to access the website from a different context. The only exception to this is the admin page, which does not have a login page implemented. It is still important to close a vendor/user instance fully before attempting to access the admin page.
 * We do not prevent users from ordering items from multiple stores.
 * Availability checking occurs when adding the item to the cart, not at checkout.
+* Input validation is improperly handled for menu items.
 
 # Contact Info:
 If, for any reason, there is an interruption in the hosting service, we should be able to manually restart the web server. 
