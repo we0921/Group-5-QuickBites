@@ -133,15 +133,16 @@ function addTotal() {
   for (var i = 1; i < orderTable.children.length - 1; i++) {
     row = orderTable.children[i];
     entry = row.children[2];
+    let quantity = Number(row.children[1].innerHTML);
     var price = entry.innerHTML.toString().substr(1, entry.innerHTML.toString().length);
 
-    total = total + Number(price);
+    total = total + (Number(price) * Number(quantity));
   }
 
   // Navigate to the final row and element. Set its value to be the order's total price.
   row = orderTable.lastChild;
   entry = row.lastChild;
-  entry.innerHTML = "$" + total;
+  entry.innerHTML = "$" + total.toFixed(2);
 }
 
 function submitOrder() {
