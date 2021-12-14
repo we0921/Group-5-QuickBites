@@ -134,6 +134,16 @@
 	background-color: #3b99ff;
 }
 
+#backgroundStockImage {
+	background-image: url("https://res.cloudinary.com/grubhub-marketing/image/upload/f_auto,fl_lossy/v1621280438/HERMES/2021/DINER/SOC/SOC-202104005-GHGuaranteeMVP/GH%20New%20Hero%20Image%20Headers/GH_Headers_Desktop_copy.jpg");
+	background-size: cover;
+	height: 200px;
+	width: 100%;
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
 .dropdown {
 	position: relative;
 	display: inline-block;
