@@ -149,11 +149,14 @@ function submitOrder() {
   let menuAndOrder = JSON.parse(document.getElementById("serverData").innerHTML);
 
   // Specifically use the order
-  let order = menuAndOrder.order;
+  let order = menuAndOrder;
 
   // Add the special request
-  order.specialRequest = document.getElementById("specialRequests").value;
+  menuAndOrder.specialRequest = document.getElementById("specialRequests").value;
+  menuAndOrder.status = true;
 
   // Send it
-  document.getElementById("postForm").value = JSON.stringify(order);
+  document.getElementById("postForm").children[0].value = JSON.stringify(menuAndOrder);
+  console.log(menuAndOrder);
+  document.getElementById("postForm").submit();
 }

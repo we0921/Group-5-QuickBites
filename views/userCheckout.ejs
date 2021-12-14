@@ -31,10 +31,10 @@
     </div>
 
     <!--- Hidden form for post request--->
-    <form style = "display:none" id = "postForm" action = "/checkout" method = "post">
+    <form style = "display:none" id = "postForm" action = "/userCheckout" method = "post">
       <input type = "text" name = "order"><input/>
     </form>
-    <form id="removeItem" style="display: none;" action="/checkout" method="post">
+    <form id="removeItem" style="display: none;" action="/userDeleteItem" method="post">
       <input type = "text" name = "item" >
       <input type = "text" name = "url" >
     </form>
@@ -46,7 +46,7 @@
     document.addEventListener("DOMContentLoaded", function() {
 
       let menuAndOrder = JSON.parse(document.getElementById("serverData").innerHTML);
-      menuAndOrder.order.items.forEach(function (menuItems) {
+      menuAndOrder.items.forEach(function (menuItems) {
         addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
         addItemToCheckoutTable(menuItems.name, menuItems.quantity, menuItems.price);
       });

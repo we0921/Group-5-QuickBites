@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>User Ticket</title>
+  <link rel="stylesheet" href="css/userTicket.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+
+  <%-include("partials/userAuthBanner")-%>
+
+  <div class="container-fluid">
+
+    <form class="" action="/userTicket" method="post">
+      <div class="ticketForm">
+          <h1 class="display-1">Submit a Ticket</h1>
+        <div class="form-group fields">
+          <label for="exampleFormControlInput1">Pick a Nuisance</label>
+          <select class="form-control" name="vendorEmail">
+            <% orders.forEach((order) =>{ %>
+              <option value="<%=order.vendorEmail%>"><%=order.vendorName%></option>
+            <%});%>
+          </select>
+        </div>
+        <div class="form-group fields">
+          <label for="exampleFormControlInput1">Title</label>
+          <input class="form-control" type="text" name="title" value="" placeholder="Enigmatic establishment...">
+        </div>
+        <div class="form-group fields">
+          <label for="textArea">Body</label>
+          <textarea class="form-control"name="body" rows="8" cols="80" placeholder="What a wonderfully woeful establishment, I would have to describe these details as such..."></textarea>
+        </div>
+        <button type="submit" class="submitBtn btn btn-lg btn-block btn-outline-primary" name="button">Submit</button>
+
+      </div>
+    </form>
+  </div>
+
+  </div>
+  </body>
+
+</html>

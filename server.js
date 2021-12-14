@@ -1,12 +1,12 @@
 //jshint esversion:6
 const mongoose = require('mongoose');
-const ejsLint = require('ejs-lint');
+// const ejsLint = require('ejs-lint');
 
 
 
 
 // connect to or create the quickbites database
-mongoose.connect("mongodb://localhost:27017/quickbitesDB", {
+mongoose.connect("mongodb+srv://user:user@quickbitescluster.oajos.mongodb.net/quickbitesDB", {
   useNewUrlParser: true
 });
 
@@ -112,11 +112,6 @@ app.post("/vendorLogin", function(req, res) {
 // serve the vendor home page
 app.get("/vendorHome", function(req, res){
 
-    // Profile.find({type: "vendor"}, function(err, vendors){
-    //   if (err) console.log(err);
-    //   else console.log(vendors);
-    // });
-
     let order, ticket;
 
       // grab the vendor orders
@@ -147,16 +142,53 @@ app.get("/vendorHome.js", function(req, res){
 
 
 
+app.post("/userDeleteItem", (req, res) =>{
 
-// app.get("/vendorEditMenu.js", function(req, res) {
-//   res.sendFile(__dirname + "/vendorEditMenu2.js");
-// });
-// app.get("/require.js", function(req, res) {
-//   res.sendFile(__dirname + "/require.js");
-// });
-// app.get("/userHomePage.js", function(req, res){
-//   res.sendFile(__dirname + "/public/scriptsource/userHomePage.js");
-// });
+  let removedItem = JSON.parse(req.body.item);
+  console.log(req.body.url);
+
+  // find the current active order
+  Order.findOneAndDelete({userEmail: emailKey, status: 0}, (err, currentOrder) => {
+    if (err) console.log(err);
+    else {
+      // dynamically create items
+      let items = [];
+
+      currentOrder.items.forEach((item) =>{
+        if (item.name.trim() == removedItem.name.trim() && item.quantity == parseInt(removedItem.quantity)) {}
+        else {
+          let obj = {
+            name: item.name,
+            calories: item.calories,
+            price: item.price,
+            image: item.image,
+            availability: item.availability,
+            quantity: item.quantity
+          };
+          items.push(obj);
+        }
+      });
+
+      const updatedOrder = new Order({
+        userName: currentOrder.userName,
+        userEmail: currentOrder.userEmail,
+        vendorName: currentOrder.vendorName,
+        vendorEmail: currentOrder.vendorEmail,
+        items: items,
+        status: 0,
+        image: currentOrder.image,
+        specialRequest: currentOrder.specialRequest
+      });
+      updatedOrder.save();
+
+      // redirect to correct page
+      let s = "61b10f129e9f1826b7ed0562";
+      let idLength = s.length;
+      if (req.body.url.length == idLength) res.redirect("/menuPage/" + req.body.url);
+      else res.redirect("/" + req.body.url);
+    }
+  });
+});
 
 // serve js files when needed
 app.use(express.static(__dirname + "/public"));
@@ -166,6 +198,7 @@ app.get("/userHome", function(req, res){
 
   // grab current order
   Order.find({userEmail: emailKey, status: false}, function(err, userOrder){
+    console.log(userOrder);
     if (err) console.log(err);
     else {
 
@@ -189,13 +222,11 @@ app.get("/userHome", function(req, res){
 app.post("/userHome", function(req, res){
 
   let vendorEmail = req.body.email;
-  console.log("***********************");
-  console.log(req.body);
-  console.log("***********************");
+
   Profile.findOne({email: vendorEmail}, function(err, vendor){
     if (err) console.log(err);
     else {
-      console.log(vendor.id);
+
       res.redirect("/menuPage/" + vendor.id);
     }
   });
@@ -205,6 +236,7 @@ app.post("/userHome", function(req, res){
 
 // serve the user account page
 app.get("/userAccountInfo", function(req, res) {
+
 
   let profile, order, ticket;
 
@@ -217,6 +249,9 @@ app.get("/userAccountInfo", function(req, res) {
     Order.find({userEmail: emailKey}, function(err, orders){
       if (err) console.log(err);
       else order = orders;
+      // console.log("*******************************************");
+      // console.log(orders);
+      // console.log("*******************************************");
 
       // grab the user tickets
       Ticket.find({ownerEmail: emailKey}, function(err, tickets){
@@ -228,9 +263,7 @@ app.get("/userAccountInfo", function(req, res) {
         userProfile.p = profile;
         userProfile.o = order;
         userProfile.t = ticket;
-        console.log(userProfile);
-        console.log(userProfile.o[0]);
-        console.log(userProfile.o[1]);
+
 
         res.render("userAccountInfo", {data: JSON.stringify(userProfile)});
       });
@@ -247,7 +280,7 @@ app.post("/userAccountInfo", function(req, res){
 
 // adding an item to user cart
 app.post("/userAddItem", function(req, res){
-  console.log(req.body);
+
   let itemName = req.body.name;
   let itemPrice = req.body.price;
   let itemCalories = req.body.calories;
@@ -351,8 +384,9 @@ app.get("/menuPage/:vendorID", function(req, res){
           Order.find({userEmail: emailKey, status: 0}, function(err, userOrder){
             const menuAndOrder = {
               menu: vendorMenu[0],
-              order: userOrder[0]
+              order: userOrder
             };
+
             res.render("userMenu", {menuAndOrder: menuAndOrder});
           });
         }
@@ -361,6 +395,24 @@ app.get("/menuPage/:vendorID", function(req, res){
   });
 });
 
+app.get("/userCheckout", (req, res) => {
+  Order.findOne({email: emailKey, status: 0}, (err, order) =>{
+    if (err) console.log(err);
+    else res.render("userCheckout", {menuAndOrder: JSON.stringify(order)});
+  });
+});
+
+app.post("/userCheckout", (req,res) => {
+  console.log(JSON.parse(req.body.order));
+  Order.findOneAndDelete({email: emailKey, status: 0}, (err, order) =>{
+    if (err) console.log(err);
+    else {
+      const newOrder = new Order(JSON.parse(req.body.order));
+      newOrder.save();
+      res.redirect("/userHome");
+    }
+  });
+});
 
 app.get("/vendorMetrics", function(req, res){
   // get the vendor's menu
@@ -386,9 +438,7 @@ app.get("/vendorMetrics", function(req, res){
 app.get("/vendorEditMenu", function(req, res) {
 
   Menu.find({vendorEmail: emailKey}, function(err, menuItems){
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log(menuItems);
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
     if (err) console.log(err);
     else {
       let vendorMenu = menuItems[0].sections;
@@ -400,7 +450,7 @@ app.get("/vendorEditMenu", function(req, res) {
 
 // save changes to the vendor edit menu
 app.post("/vendorEditMenu", function(req, res){
-console.log(JSON.parse(req.body.menu));
+
 
 
   Profile.findOne({email: emailKey}, function(err, vendor){
@@ -415,9 +465,7 @@ console.log(JSON.parse(req.body.menu));
         let itemArr = [];
 
         section.items.forEach(function(item){
-          console.log("**********************");
-          console.log(item);
-            console.log("**********************");
+
           let itemObj = {};
 
           itemObj.name = item.Name;
@@ -436,24 +484,21 @@ console.log(JSON.parse(req.body.menu));
       Menu.remove({vendorEmail: emailKey}, function(err, thing){
         if (err) console.log(err);
         else {
-        console.log("**********************");
-        console.log(vendor);
-        console.log("**********************");
-        console.log(menuSections);
+
         const menu = new Menu({
         vendorName: vendor.restaurant,
         vendorEmail: vendor.email,
         sections: menuSections,
         approved: vendor.approved
         });
-        console.log(JSON.stringify(menu));
+
         menu.save(function(err, thing){
           if (err) console.log(err);
           else {
-            console.log("savedDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        res.redirect("/vendorEditMenu");
           }
         });
-        res.redirect("/vendorEditMenu");
+
         }
       });
 
@@ -464,6 +509,72 @@ console.log(JSON.parse(req.body.menu));
 
 });
 
+// user submit ticket
+app.get("/userTicket", (req, res) => {
+  Order.find({userEmail: emailKey}, (err, orders) => {
+    if (err) console.log(err);
+    else res.render("userTicket", {orders: orders});
+  });
+});
+
+app.post("/userTicket", (req, res) => {
+  // finds the user's name
+  Profile.findOne({email: emailKey}, (err, prof) => {
+    if (err) console.log(err);
+    else {
+      // find the vendors name
+      Profile.findOne({email: req.body.vendorEmail}, (err, vendor) => {
+        if (err) console.log(err);
+        else {
+          const ticket = new Ticket({
+            ownerName: prof.name + " " + prof.last,
+            ownerEmail: emailKey,
+            receiverName: vendor.restaurant,
+            receiverEmail: req.body.vendorEmail,
+            title: req.body.title,
+            body: req.body.body,
+            type: "user",
+            status: 0
+          });
+          ticket.save();
+          res.redirect("/userAccountInfo");
+        }
+      });
+    }
+  });
+});
+// vendor submit ticket
+app.get("/vendorTicket", (req, res) => {
+  Order.find({vendorEmail: emailKey}, (err, orders) => {
+    if (err) console.log(err);
+    else res.render("vendorTicket", {orders: orders});
+  });
+});
+
+app.post("/vendorTicket", (req, res) => {
+  Profile.findOne({email: emailKey}, (err, prof) => {
+    if (err) console.log(err);
+    else {
+      Profile.findOne({email: req.body.userEmail}, (err, user) => {
+        if (err) console.log(err);
+        else {
+          const ticket = new Ticket({
+            ownerName: prof.restaurant,
+            ownerEmail: emailKey,
+            receiverName: user.first + " " + user.last,
+            receiverEmail: req.body.userEmail,
+            title: req.body.title,
+            body: req.body.body,
+            type: "vendor",
+            status: 0
+          });
+          ticket.save();
+          res.redirect("/vendorHome");
+        }
+      });
+    }
+  });
+});
 
 // admin home page
 app.get("/adminHome", function(req, res){
@@ -492,7 +603,7 @@ app.get("/adminHome", function(req, res){
               adminInfo.vProfile = vendorProfiles;
               adminInfo.vTicket = vendorTickets;
               adminInfo.uTicket = userTickets;
-              console.log(adminInfo);
+
               res.render("adminHome", {adminInfoList: adminInfo});
             }
           });
@@ -640,151 +751,151 @@ function login_register(req, res, type){
           profile.save();
 
           //create a sample menu page
-          const menu = new Menu({
-            vendorName: req.body.registerRestaurantName,
-            vendorEmail: req.body.registerEmail,
-            sections: [{
-                title: "Food",
-                items: [{
-                    name: "Ogre Fries",
-                    calories: 123,
-                    price: 9.99,
-                    image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
-                    availability: 1,
-                    quantity: 1
-                  },
-                  {
-                    name: "Onion",
-                    calories: 456,
-                    price: 7.99,
-                    image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
-                    availability: 1,
-                    quantity: 1
-                  },
-                  {
-                    name: "Good Grubs",
-                    calories: 789,
-                    price: 4.99,
-                    image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
-                    availability: 1,
-                    quantity: 1
-                  },
-                  {
-                    name: "Mud Burger",
-                    calories: 100,
-                    price: 11.99,
-                    image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-                    availability: 0,
-                    quantity: 1
-                  }
-                ]
-              },
-              {
-                title: "Drank",
-                items: [{
-                  name: "Swamp Shake",
-                  calories: 420,
-                  price: 3.99,
-                  image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
-                  availability: 0,
-                  quantity: 0
-                }]
-              }
-            ],
-            approved: true
-          });
-          //insert into database
-          menu.save();
+          // const menu = new Menu({
+          //   vendorName: req.body.registerRestaurantName,
+          //   vendorEmail: req.body.registerEmail,
+          //   sections: [{
+          //       title: "Food",
+          //       items: [{
+          //           name: "Ogre Fries",
+          //           calories: 123,
+          //           price: 9.99,
+          //           image: "https://media.istockphoto.com/vectors/slice-of-melted-cheese-pepperoni-pizza-vector-id901501348",
+          //           availability: 1,
+          //           quantity: 1
+          //         },
+          //         {
+          //           name: "Onion",
+          //           calories: 456,
+          //           price: 7.99,
+          //           image: "https://media.istockphoto.com/vectors/hot-dog-with-mustard-hand-drawing-vector-id1146404440?k=20&m=1146404440&s=612x612&w=0&h=qx-qtPEiMs7TAiqnHqQU0MB2bJsP9sUWgynwoQAAjyg=",
+          //           availability: 1,
+          //           quantity: 1
+          //         },
+          //         {
+          //           name: "Good Grubs",
+          //           calories: 789,
+          //           price: 4.99,
+          //           image: "https://fortheloveofcooking.net/wp-content/uploads/2017/02/sandwich-clipart-burger_sandwich_PNG4138.png",
+          //           availability: 1,
+          //           quantity: 1
+          //         },
+          //         {
+          //           name: "Mud Burger",
+          //           calories: 100,
+          //           price: 11.99,
+          //           image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+          //           availability: 0,
+          //           quantity: 1
+          //         }
+          //       ]
+          //     },
+          //     {
+          //       title: "Drank",
+          //       items: [{
+          //         name: "Swamp Shake",
+          //         calories: 420,
+          //         price: 3.99,
+          //         image: "https://lh3.googleusercontent.com/proxy/W3dC4wHDJvj8FhEaZcz8vVWrKhAol3zZytHT1w_0ASMjXFSQurdU9hnNt02GwWCi4UXRupacs_cdKRhHk8H7UehXM6QF34JQ",
+          //         availability: 0,
+          //         quantity: 0
+          //       }]
+          //     }
+          //   ],
+          //   approved: true
+          // });
+          // //insert into database
+          // menu.save();
 
-          // create default orders and tickets
-          const order = new Order({
-            userName: "John Wick",
-            userEmail: "john.wick@yahoo.com",
-            vendorName: req.body.registerRestaurantName,
-            vendorEmail: req.body.registerEmail,
-            items: [
-              {
-                name: "Ogre Fries",
-                calories: 123,
-                price: 9.99,
-                image: "",
-                availability: 1,
-                quantity: 10
-              },
-              {
-                name: "Onion",
-                calories: 456,
-                price: 7.99,
-                image: "",
-                availability: 1,
-                quantity: 2
-              },
-              {
-                name: "Swamp Shake",
-                calories: 420,
-                price: 3.99,
-                image: "",
-                availability: 1,
-                quantity: 3
-              }
-            ],
-            status: 1,
-            image: "https://media.istockphoto.com/vectors/ice-cream-cone-with-chocolate-and-decor-vector-illustration-clipart-vector-id948444318",
-            specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
-          });
-          const order2 = new Order({
-            userName: "Shrek",
-            userEmail: "onions@gmail.com",
-            vendorName: req.body.registerRestaurantName,
-            vendorEmail: req.body.registerEmail,
-            items: [
-              {
-                name: "Ogre Fries",
-                calories: 123,
-                price: 9.99,
-                image: "",
-                availability: 1,
-                quantity: 20
-              },
-              {
-                name: "Swamp Shake",
-                calories: 420,
-                price: 3.99,
-                image: "",
-                availability: 1,
-                quantity: 3
-              }
-            ],
-            status: 1,
-            image: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=980:*",
-            specialRequest: "Please give me EXACTLY ONE FRY!!!"
-          });
-          order.save();
-          order2.save();
+          // // create default orders and tickets
+          // const order = new Order({
+          //   userName: "John Wick",
+          //   userEmail: "john.wick@yahoo.com",
+          //   vendorName: req.body.registerRestaurantName,
+          //   vendorEmail: req.body.registerEmail,
+          //   items: [
+          //     {
+          //       name: "Ogre Fries",
+          //       calories: 123,
+          //       price: 9.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 10
+          //     },
+          //     {
+          //       name: "Onion",
+          //       calories: 456,
+          //       price: 7.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 2
+          //     },
+          //     {
+          //       name: "Swamp Shake",
+          //       calories: 420,
+          //       price: 3.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 3
+          //     }
+          //   ],
+          //   status: 1,
+          //   image: "https://media.istockphoto.com/vectors/ice-cream-cone-with-chocolate-and-decor-vector-illustration-clipart-vector-id948444318",
+          //   specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
+          // });
+          // const order2 = new Order({
+          //   userName: "Shrek",
+          //   userEmail: "onions@gmail.com",
+          //   vendorName: req.body.registerRestaurantName,
+          //   vendorEmail: req.body.registerEmail,
+          //   items: [
+          //     {
+          //       name: "Ogre Fries",
+          //       calories: 123,
+          //       price: 9.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 20
+          //     },
+          //     {
+          //       name: "Swamp Shake",
+          //       calories: 420,
+          //       price: 3.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 3
+          //     }
+          //   ],
+          //   status: 1,
+          //   image: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=980:*",
+          //   specialRequest: "Please give me EXACTLY ONE FRY!!!"
+          // });
+          // order.save();
+          // order2.save();
 
-          // create sample tickets
-          const ticket = new Ticket({
-            ownerName: req.body.registerRestaurantName,
-            ownerEmail: req.body.registerEmail,
-            receiverName: "Donkey",
-            receiverEmail: "dragons@gmail.com",
-            title: "WORST CUSTOMER EVER!!!!",
-            body: "GRRRRRRRRRRRRRRRRRRRRR I HATE DONKEYYYYY",
-            type: "vendor",
-            status: 0
-          });
-          const ticket2 = new Ticket({
-            ownerName: req.body.registerRestaurantName,
-            ownerEmail: req.body.registerEmail,
-            receiverName: "Tony the Tiger",
-            receiverEmail: "greattt@gmail.com",
-            title: "God this customer is the best oh my oh wow",
-            body: "Man I have never had such a good customer holy god this guy is amazing oh wow, can we get him an award or somethig please holy moly",
-            type: "vendor",
-            status: 0
-          });
-          ticket.save();
-          ticket2.save();
+          // // create sample tickets
+          // const ticket = new Ticket({
+          //   ownerName: req.body.registerRestaurantName,
+          //   ownerEmail: req.body.registerEmail,
+          //   receiverName: "Donkey",
+          //   receiverEmail: "dragons@gmail.com",
+          //   title: "WORST CUSTOMER EVER!!!!",
+          //   body: "GRRRRRRRRRRRRRRRRRRRRR I HATE DONKEYYYYY",
+          //   type: "vendor",
+          //   status: 0
+          // });
+          // const ticket2 = new Ticket({
+          //   ownerName: req.body.registerRestaurantName,
+          //   ownerEmail: req.body.registerEmail,
+          //   receiverName: "Tony the Tiger",
+          //   receiverEmail: "greattt@gmail.com",
+          //   title: "God this customer is the best oh my oh wow",
+          //   body: "Man I have never had such a good customer holy god this guy is amazing oh wow, can we get him an award or somethig please holy moly",
+          //   type: "vendor",
+          //   status: 0
+          // });
+          // ticket.save();
+          // ticket2.save();
           let login_reg_status = {
             status: "register-success"
           };
@@ -808,86 +919,86 @@ function login_register(req, res, type){
           profile.save();
 
           // create default orders and tickets
-          const order = new Order({
-            userName: req.body.registerFirstName,
-            userEmail: req.body.registerEmail,
-            vendorName: "McRonalds",
-            vendorEmail: "McRonalds@gmail.com",
-            items: [
-              {
-                name: "McFries",
-                calories: 345,
-                price: 9.99,
-                image: "",
-                availability: 1,
-                quantity: 5
-              },
-              {
-                name: "McShake",
-                calories: 789,
-                price: 5.99,
-                image: "",
-                availability: 1,
-                quantity: 2
-              },
-              {
-                name: "McPatty",
-                calories: 420,
-                price: 6.09,
-                image: "",
-                availability: 1,
-                quantity: 3
-              }
-            ],
-            status: 0,
-            image: "",
-            specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
-          });
-          const order2 = new Order({
-            userName: req.body.registerFirstName,
-            userEmail: req.body.registerEmail,
-            vendorName: "Burger God",
-            vendorEmail: "burgerGod@gmail.com",
-            items: [
-              {
-                name: "GodFries",
-                calories: 345,
-                price: 9.99,
-                image: "",
-                availability: 1,
-                quantity: 5
-              }
-            ],
-            status: 1,
-            image: "",
-            specialRequest: "Please give me EXACTLY ONE FRY!!!"
-          });
-          order.save();
-          order2.save();
+          // const order = new Order({
+          //   userName: req.body.registerFirstName,
+          //   userEmail: req.body.registerEmail,
+          //   vendorName: "McRonalds",
+          //   vendorEmail: "McRonalds@gmail.com",
+          //   items: [
+          //     {
+          //       name: "McFries",
+          //       calories: 345,
+          //       price: 9.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 5
+          //     },
+          //     {
+          //       name: "McShake",
+          //       calories: 789,
+          //       price: 5.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 2
+          //     },
+          //     {
+          //       name: "McPatty",
+          //       calories: 420,
+          //       price: 6.09,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 3
+          //     }
+          //   ],
+          //   status: 0,
+          //   image: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=980:*",
+          //   specialRequest: "Make sure to put my McFries DIRECTLY INTO MY MCSHAKE. Then slather the amalgamation ALL OVER my McPatty."
+          // });
+          // const order2 = new Order({
+          //   userName: req.body.registerFirstName,
+          //   userEmail: req.body.registerEmail,
+          //   vendorName: "Burger God",
+          //   vendorEmail: "burgerGod@gmail.com",
+          //   items: [
+          //     {
+          //       name: "GodFries",
+          //       calories: 345,
+          //       price: 9.99,
+          //       image: "",
+          //       availability: 1,
+          //       quantity: 5
+          //     }
+          //   ],
+          //   status: 1,
+          //   image: "https://media.istockphoto.com/vectors/ice-cream-cone-with-chocolate-and-decor-vector-illustration-clipart-vector-id948444318",
+          //   specialRequest: "Please give me EXACTLY ONE FRY!!!"
+          // });
+          // order.save();
+          // order2.save();
 
           // create sample tickets
-          const ticket = new Ticket({
-            ownerName: req.body.registerFirstName,
-            ownerEmail: req.body.registerEmail,
-            receiverName: "McRonald",
-            receiverEmail: "McRonalds@gmail.com",
-            title: "BEST PLACE EVAAAA!!!!",
-            body: "OH MY GOD THIS PLACE IS SO GGUUUUUDDDD UGHHHHHHHHH XDDD",
-            type: "user",
-            status: 0
-          });
-          const ticket2 = new Ticket({
-            ownerName: req.body.registerFirstName,
-            ownerEmail: req.body.registerEmail,
-            receiverName: "BurgerGod",
-            receiverEmail: "burgerGod@gmail.com",
-            title: "this place suxxxxxxx :P",
-            body: "I would rate this place 1/17 brownie points. Not my mug of eggnog",
-            type: "user",
-            status: 0
-          });
-          ticket.save();
-          ticket2.save();
+          // const ticket = new Ticket({
+          //   ownerName: req.body.registerFirstName,
+          //   ownerEmail: req.body.registerEmail,
+          //   receiverName: "McRonald",
+          //   receiverEmail: "McRonalds@gmail.com",
+          //   title: "BEST PLACE EVAAAA!!!!",
+          //   body: "OH MY GOD THIS PLACE IS SO GGUUUUUDDDD UGHHHHHHHHH XDDD",
+          //   type: "user",
+          //   status: 0
+          // });
+          // const ticket2 = new Ticket({
+          //   ownerName: req.body.registerFirstName,
+          //   ownerEmail: req.body.registerEmail,
+          //   receiverName: "BurgerGod",
+          //   receiverEmail: "burgerGod@gmail.com",
+          //   title: "this place suxxxxxxx :P",
+          //   body: "I would rate this place 1/17 brownie points. Not my mug of eggnog",
+          //   type: "user",
+          //   status: 0
+          // });
+          // ticket.save();
+          // ticket2.save();
           let login_reg_status = {
             status: "register-success"
           };

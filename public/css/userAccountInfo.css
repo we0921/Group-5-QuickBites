@@ -16,7 +16,7 @@
 }
 .contentTable{
 	width: 100%;
-	
+
 }
 .contentTable td {
 	display: inline-flex;
@@ -94,7 +94,7 @@
 }
 #supportTicketsContainer {
 	width: 100%;
-	height: 75vh;
+	height: 80%;
 	margin-top: 3%;
 	display: inline-block;
 }
@@ -139,7 +139,7 @@
 	border-color: #D3D3D3;
 }
 .orderCardPhoto {
-	background-color: #FFD580;
+	/* background-color: #FFD580; */
 	height: 100%;
 	width: 40%;
 	float: left;
@@ -166,22 +166,22 @@
 	border-color: #D3D3D3;
 }
 .totalText {
-	padding-top: 5px;
+
 	margin-left: 5%;
 	float: left;
 }
 .total {
-	padding-top: 5px;
+
 	margin-right: 5%;
 	float: right;
 }
 .dishAmount {
-	padding-top: 5px;
+
 	margin-left: 5%;
 	float: left;
 }
 .dishName {
-	padding-top: 5px;
+
 	margin-right: 5%;
 	float: right;
 }
@@ -215,7 +215,7 @@
 .cardSupportTicketHead {
 	/*background-color: #FFD580;*/
 	height: 20%;
-	width: 100%; 
+	width: 100%;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 }

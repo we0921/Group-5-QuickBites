@@ -3,15 +3,7 @@
   <link href = "css/userAccountInfo.css" rel = "stylesheet"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
 
-</head>
-<body id = "body">
-	<div id = "banner">
-			<img id = "QuickBitesLogo" src = "/pictures/QuickBites.png" object-fit = "contain" />
-		<div id = "bannerButtonContainer">
-			<button id = "shopButton"> Looking to Shop? </button>
-			<button id = "adminButton"> Admin Access </button>
-		</div>
-	</div>
+  <%-include("partials/userHomeBanner")-%>
   <table class = "contentTable">
     <tr>
       <td class = accountInfoColumn>
@@ -54,26 +46,42 @@
       <td class = orderHistoryColumn>
         <div id = "orderHistoryContainer">
       		<h2 id = "orderHistoryHeader">
-      			<div class = "headerFormat"> Your Order History </div>
+      			<div class = "headerFormat"> Active/Previous Order History </div>
       		</h2>
       	</div>
       </td>
 
-      <td class = supportTicketsColumn>
-        <div id = "supportTicketsContainer">
-      		<h2 id = "accountInfoHeader">
-      			<div class = "headerFormat"> Support Tickets </div>
-      		</h2>
-      	</div>
-      </td>
+        <td class = supportTicketsColumn>
+          <div class="container-fluid">
+            <div class="row">
+              <div id = "supportTicketsContainer">
+                <h2 id = "accountInfoHeader">
+                  <div class = "headerFormat"> Support Tickets </div>
+                </h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="">
+                <a href="/userTicket">
+                  <button type="button" style="margin-top: 10px;"class="btn btn-primary btn-block" name="button">Submit a Ticket</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </td>
     </tr>
   </table>
-  <form id = "post1" style="display: none;" action = "/" method = "post">
+  <form id = "post1" style="display: none;" action = "/userAccountInfo" method = "post">
     <input type = "text" name = "email">
     <input type = "text" name = "name">
     <input type = "text" name = "password">
     <input type = "text" name = "address">
   </form>
+
+  <form id="removeItem" style="display: none;" action="/userDeleteItem" method="post">
+  <input type = "text" name = "item" >
+  <input type = "text" name = "url" >
+</form>
 
   <!-- //feedback from server -->
   <h1 style = "display:none" id = "ue"> <%=data%> </h1>
@@ -93,9 +101,12 @@
       //Displaying user's order history
       account.o.forEach(function(order){
         let name = order.vendorName;
+        let image = order.image;
         let dish1, dish2, dish1Amount, dish2Amount, dish1price, dish2price;
         let counter = 0;
+        let total = 0;
         order.items.forEach(function(item){
+          total += item.price * item.quantity;
           if (counter == 0) {
             dish1 = item.name;
             dish1Amount = item.quantity;
@@ -106,14 +117,34 @@
               dish2price = item.price;
           } counter++;
         });
-        if (dish2 != null) buildOrderCard2(name, dish1, dish1Amount, dish2, dish2Amount, dish1price + dish2price);
-        else buildOrderCard1(name, dish1, dish1Amount, dish1price);
+        if (dish2 != null) buildOrderCard2(name, dish1, dish1Amount, dish2, dish2Amount, total.toFixed(2), image);
+        else buildOrderCard1(name, dish1, dish1Amount, total.toFixed(2), image);
       });
 
       //displaying all of user's tickets
       account.t.forEach(function(ticket) {
         buildSupportTicket(ticket.receiverName, ticket.status, ticket.body);
       });
+
+      // loop through each order, finding the active one
+      account.o.forEach((order) => {
+        if (!order.status) {
+          // build shopping cart
+          if (order.length == 0){}
+          else {
+            // let vName = menuAndOrder.order.vendorName;
+            console.log(order.items);
+
+            //iterating through order Object
+            order.items.forEach(function (menuItems) {
+              console.log(menuItems)
+              addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
+            });
+          }
+        }
+      });
+
+
     });
   </script>
 </body>

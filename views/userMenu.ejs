@@ -7,7 +7,6 @@
     <title></title>
     <%-include("partials/userHomeBanner")-%>
     <div id = "backgroundStockImage">
-      stock image goes here
     </div>
     <!-- for each section -->
     <div class="container-fluid">
@@ -35,7 +34,7 @@
           <%}%>
           <!-- start of item card -->
           <div class="col-sm">
-            <div class="card mb-3" style="width: 80%;">
+            <div class="card mb-3" style="width: 41rem;">
               <div class="row no-gutters">
                 <div class="col-md-4">
                   <img src="<%=item.image%>" alt="Card image cap" class="card-img-top">
@@ -85,6 +84,12 @@
       <input id="venEmail" type="text" name="venEmail" value="">
       <input id="image" type="text" name="image" value="">
     </form>
+    <form id="removeItem" style="display: none;" action="/userDeleteItem" method="post">
+     <input type = "text" name = "item" >
+     <input type = "text" name = "url" >
+   </form>
+    <h1 id="serverData" style="display: none;"><%=JSON.stringify(menuAndOrder)%></h1>
+    <script src="/scriptsource/userMenu.js"></script>
     <script>
 
     function addItem(button) {
@@ -128,6 +133,20 @@
 
       document.getElementById("addItemForm").submit();
     }
+    //Getting json object containing menu/order
+    let menuAndOrder = JSON.parse(document.getElementById("serverData").innerHTML);
+
+    // shopping cart
+    if (menuAndOrder.order.length == 0){}
+       else {
+         // let vName = menuAndOrder.order.vendorName;
+         console.log(menuAndOrder.order[0].items);
+         //iterating through order Object
+         menuAndOrder.order[0].items.forEach(function (menuItems) {
+           console.log(menuItems);
+           addItemToShoppingCart(menuItems.name, menuItems.quantity, menuItems.price);
+         });
+       }
     </script>
   </body>
 </html>
