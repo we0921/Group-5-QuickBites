@@ -527,7 +527,7 @@ app.post("/userTicket", (req, res) => {
         if (err) console.log(err);
         else {
           const ticket = new Ticket({
-            ownerName: prof.name + " " + prof.last,
+            ownerName: prof.first + " " + prof.last,
             ownerEmail: emailKey,
             receiverName: vendor.restaurant,
             receiverEmail: req.body.vendorEmail,
