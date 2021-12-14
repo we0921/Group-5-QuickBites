@@ -20,15 +20,12 @@ Password: p
 Login for Vendor Account(s):
 
 Email: burger@burger.com
-
 Password: p
 
 Email: crusty@crab.com
-
 Password: p
 
 Email: shrek@swamp.com
-
 Password: p
 
 Further accounts can be created using the registration fields on the respective login page. Account information (with the exception of email address) can be changed in the account details page on the site.
@@ -41,8 +38,6 @@ If, for any reason, there is an interruption in the hosting service, we should b
 We can be reached at our respective email addresses (it's probably best to address the email to all of us, so that we are more likely to respond quickly:
 
 Brandon: bpl5252@psu.edu
-
 Craig: cdm5698@psu.edu
-
 Daniel: dxg5480@psu.edu
 
