@@ -3,12 +3,12 @@ Names: Brandon Leger, Daniel Gomez, Craig Moir, Nan Chen, Patrick McCleerey
 
 # Accessing the Site:
 Accessing the Vendor login page:
-<afternoon-reef-41036.herokuapp.com/vendorLogin>
+<https://afternoon-reef-41036.herokuapp.com/vendorLogin>
 
 The user login page may be accessed via the "Looking to Shop?" button, and the vendor login page may subsequently be accessed by the "Looking to Sell?" button.
 
 Accessing the Admin Home Page:
-<afternoon-reef-41036.herokuapp.com/adminHome>
+<https://afternoon-reef-41036.herokuapp.com/adminHome>
 
 # Credentials:
 Login for User Account(s):
