@@ -16,6 +16,9 @@ Login for User Account(s):
 Email: john@gmail.com
 Password: p
 
+Email: jane@gmail.com
+Password: p
+
 Login for Vendor Account(s):
 
 Email: burger@burger.com
@@ -37,6 +40,7 @@ Further accounts can be created using the registration fields on the respective 
 * We do not prevent users from ordering items from multiple stores.
 * Availability checking occurs when adding the item to the cart, not at checkout.
 * Input validation is improperly handled for menu items.
+* Admin metrics can be accessed at /adminMetrics
 
 # Contact Info:
 If, for any reason, there is an interruption in the hosting service, we should be able to manually restart the web server. 
