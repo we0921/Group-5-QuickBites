@@ -31,8 +31,10 @@ Further accounts can be created using the registration fields on the respective 
 
 # Known Issues:
 
-* Concurrent user/vendor access causes synchronization issues. Doing so will cause issues that will require our manual intervention.
 * Do not have multiple tabs of the site open (ex: the user home page and a restaurant menu)
+* Concurrent user/vendor access causes synchronization issues. Doing so will cause issues that will require our manual intervention.
+* We do not prevent users from ordering items from multiple stores.
+* Availability checking occurs when adding the item to the cart, not at checkout.
 
 # Contact Info:
 If, for any reason, there is an interruption in the hosting service, we should be able to manually restart the web server. 
