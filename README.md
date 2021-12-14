@@ -33,7 +33,7 @@ Further accounts can be created using the registration fields on the respective 
 
 * Do not have multiple tabs of the site open (ex: the user home page and a restaurant menu)
 * Concurrent user/vendor access causes synchronization issues. Doing so will cause issues that will require our manual intervention.
-* ALWAYS LOG IN, if attempting to access the website from a different context.
+* ALWAYS LOG IN, if attempting to access the website from a different context. The only exception to this is the admin page, which does not have a login page implemented. It is still important to close a vendor/user instance fully before attempting to access the admin page.
 * We do not prevent users from ordering items from multiple stores.
 * Availability checking occurs when adding the item to the cart, not at checkout.
 
