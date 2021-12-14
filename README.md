@@ -33,12 +33,13 @@ Further accounts can be created using the registration fields on the respective 
 
 * Do not have multiple tabs of the site open (ex: the user home page and a restaurant menu)
 * Concurrent user/vendor access causes synchronization issues. Doing so will cause issues that will require our manual intervention.
+* ALWAYS LOG IN, if attempting to access the website from a different context.
 * We do not prevent users from ordering items from multiple stores.
 * Availability checking occurs when adding the item to the cart, not at checkout.
 
 # Contact Info:
 If, for any reason, there is an interruption in the hosting service, we should be able to manually restart the web server. 
-We can be reached at our respective email addresses (it's probably best to address the email to all of us, so that we are more likely to respond quickly:
+We can be reached at our respective email addresses (it's probably best to address the email to all of us, so that we are more likely to respond quickly):
 
 Brandon: bpl5252@psu.edu
 Craig: cdm5698@psu.edu
