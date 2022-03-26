@@ -673,7 +673,7 @@ app.post("/adminCloseUserTicket", function(req, res){
 
 // added server port
 let port = process.env.PORT;
-if (port == null || port = "") {
+if (port == null || port == "") {
   port = 3000;
 }
 app.listen(port, function() {
@@ -690,34 +690,72 @@ function login_register(req, res, type){
   let registerEmail = req.body.registerEmail;
   let loginPassword = req.body.userPassword;
 
+ const query = {$where: `this.email == '${loginEmail}' && this.password == '${loginPassword}'`};
+
   // did the person login?
   if (Object.keys(req.body).includes("loginBtn")){
 
     // does this person already exist?
-    Profile.find({email: loginEmail, password: loginPassword},function(err, profiles){
+    Profile.find(query,function(err, profiles){
+
+
+
+      const lookBehind = /.+(?<!ab)$/;
+
+      console.log(lookBehind.test(loginPassword));
+
       let login_reg_status = {
-        status: "login-fail"
+        status: "FAIL"
       };
-      if (err) console.log(err);
+
+      let succ = {
+        status: "SUCCESS"
+      };
+
+      let error = {
+        status: "ERROR"
+      };
+
+      let attackDetected = {
+        status: "ATTACK DETECTED"
+      };
+
+      // create RegEx for Tautology Attacks
+      const tautology = /(?=.*'.*)(?=.*\|\|.*)(?=.*[=<>].*).*/;
+
+
+      if (err) {
+        console.log(err);
+        res.render("userLogin", {status: JSON.stringify(error)});
+      }
+
+      else if (tautology.test(loginPassword)){
+        res.render("userLogin", {status: JSON.stringify(attackDetected)});
+      }
 
       // person exists
       else if (profiles.length != 0){
         emailKey = profiles[0].email;
+        //console.log(type);
+        //console.log(profiles[0]);
 
+
+
+        res.render("userLogin", {status: JSON.stringify(succ)});
         // check if profile type matches the one of the login attempt
-        if (type === "vendor" && profiles[0].type === "vendor") res.redirect("/vendorHome");
-        else if (type === "user" && profiles[0].type === "user") res.redirect("/userHome");
-        else if (type === "admin" && profiles[0].type === "admin") res.redirect("/adminHome");
-        else {
-          if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
-          else if (type === "user") res.render("userLogin", {status: JSON.stringify(login_reg_status)});
-          else res.render("adminLogin");
+        // if (type === "vendor" && profiles[0].type === "vendor") res.redirect("/vendorHome");
+        // else if (type === "user" && profiles[0].type === "user") res.render("userLogin", {status: JSON.stringify(succ)});
+        // else if (type === "admin" && profiles[0].type === "admin") res.redirect("/adminHome");
+        //else {
+          //if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
+          //else if (type === "user") res.render("userLogin", {status: JSON.stringify(login_reg_status)});
+          //else res.render("adminLogin");
         }
-      }
+
       // otherwise this person doesnt exist and we can send them back to the login
       else{
-        if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
-        else res.render("userLogin", {status: JSON.stringify(login_reg_status)});
+        //if (type === "vendor") res.render("vendorLogin", {status: JSON.stringify(login_reg_status)});
+        res.render("userLogin", {status: JSON.stringify(login_reg_status)});
       }
     });
   }
