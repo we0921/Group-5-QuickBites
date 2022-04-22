@@ -721,8 +721,8 @@ function login_register(req, res, type){
       };
 
       // create RegEx for Tautology Attacks
-      const tautology = /(?=.*'.*)(?=.*\|\|.*)(?=.*[=<>].*).*/;
-
+      //const tautology = /(?=.*'.*)(?=.*\|\|.*)(?=.*[=<>].*).*/;
+      const tautology = /(?=.*'.*)(?=.*\|\|.*)(?=.*[=<>]|[\|\|].*).*/;
 
       if (err) {
         console.log(err);
